@@ -19,11 +19,15 @@ Gem::Specification.new do |s|
 
   # s.executables   = ['impression']
 
-  s.add_runtime_dependency      'polyphony',          '~>0.51.0'
-  s.add_runtime_dependency      'tipi',               '~>0.37'
+  s.add_runtime_dependency      'polyphony',            '~>0.51.0'
+  s.add_runtime_dependency      'tipi',                 '~>0.37'
+  s.add_runtime_dependency      'kramdown',             '~>2.3.0'
+  s.add_runtime_dependency      'rouge',                '~>3.26.0'
+  s.add_runtime_dependency      'kramdown-parser-gfm',  '~>1.1.0'
+
   
-  s.add_development_dependency  'rake',               '~>12.3.3'
-  s.add_development_dependency  'minitest',           '~>5.11.3'
-  s.add_development_dependency  'minitest-reporters', '~>1.4.2'
-  s.add_development_dependency  'simplecov',          '~>0.17.1'
+  s.add_development_dependency  'rake',                 '~>12.3.3'
+  s.add_development_dependency  'minitest',             '~>5.11.3'
+  s.add_development_dependency  'minitest-reporters',   '~>1.4.2'
+  s.add_development_dependency  'simplecov',            '~>0.17.1'
 end
