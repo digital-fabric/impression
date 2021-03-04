@@ -14,10 +14,13 @@ puts "pid: #{Process.pid}"
 puts 'Listening on port 4411...'
 
 Tipi.serve('0.0.0.0', 4411, opts) do |req|
-  app.call(req)
+  req.route do
+    req.on('assets') { req.serve_file(req.route_relative_path, base_path: File.join(__dir__, '_assets')) }
+    req.default { app.call(req) }
+  end
 rescue Exception => e
-  p e
-  puts e.backtrace.join("\n")
+  p [req.path, e]
+  # puts e.backtrace.join("\n")
   status = e.respond_to?(:http_status) ? e.http_status : 500
   req.respond(e.inspect, ':status' => status)
 end

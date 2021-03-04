@@ -34,6 +34,9 @@ module Impression
         @map[page.relative_permalink] = page
       end
       @map['/'] = @map['/index']
+
+      puts '* loaded pages' * 40
+      p page_keys: @map.keys
     end
     alias_method :reload, :load
 
@@ -42,12 +45,10 @@ module Impression
     end
 
     def serve(req)
-      page = @map[req.routing_path]
+      p serve: req.route_relative_path
+      page = @map[req.route_relative_path]
       raise NotFoundError unless page
 
-      # return req.respond('Hello world')
-
-      
       req.respond(page.to_html, 'Content-Type' => 'text/html')
     end
 
@@ -108,8 +109,26 @@ module Impression
       end
 
       def render_html
-        inner = Kramdown::Document.new(@content, **kramdown_options).to_html
-        "<!doctype html><html><body>#{inner}</body></html>"
+        html_layout { Kramdown::Document.new(@content, **kramdown_options).to_html }
+      end
+
+      def html_layout
+        <<~HTML
+        <!DOCTYPE html>
+        <html lang="en-us">
+          <head>
+            <title>#{title}</title>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="chrome=1">
+            <meta name="HandheldFriendly" content="True">
+            <meta name="MobileOptimized" content="320">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <meta name="referrer" content="no-referrer">
+            <link rel="stylesheet" href="/assets/style.css">
+          </head>
+          <body>#{yield}</body>
+        </html>
+        HTML
       end
     end
   end
