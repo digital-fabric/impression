@@ -11,10 +11,13 @@ opts = {
 }
 
 puts "pid: #{Process.pid}"
-puts 'Listening on port 4411...'
 
-Tipi.serve('0.0.0.0', 4411, opts) do |req|
+Tipi.full_service do |req|
   req.route do
+    if req.host != 'noteflakes.com'
+      req.respond(nil, ':status' => Qeweney::Status::SERVICE_UNAVAILABLE)
+      stop_routing
+    end
     req.on('assets') { req.serve_file(req.route_relative_path, base_path: File.join(__dir__, '_assets')) }
     req.default { app.call(req) }
   end
