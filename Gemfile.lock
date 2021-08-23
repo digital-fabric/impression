@@ -1,7 +1,7 @@
 PATH
   remote: ../polyphony
   specs:
-    polyphony (0.67)
+    polyphony (0.71)
 
 PATH
   remote: ../qeweney
@@ -12,13 +12,14 @@ PATH
 PATH
   remote: ../tipi
   specs:
-    tipi (0.41)
+    tipi (0.43)
       acme-client (~> 2.0.8)
       extralite (~> 1.2)
+      h1p (~> 0.2)
       http-2 (~> 0.11)
       localhost (~> 1.1.4)
       msgpack (~> 1.4.2)
-      polyphony (~> 0.67)
+      polyphony (~> 0.69)
       qeweney (~> 0.14)
       rack (>= 2.0.8, < 2.3.0)
       websocket (~> 1.2.8)
@@ -43,7 +44,7 @@ GEM
     builder (3.2.4)
     docile (1.3.5)
     escape_utils (1.2.1)
-    extralite (1.2)
+    extralite (1.3)
     faraday (1.7.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -63,6 +64,7 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
+    h1p (0.2)
     http-2 (0.11.0)
     json (2.5.1)
     kramdown (2.3.1)
