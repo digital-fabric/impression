@@ -85,6 +85,26 @@ module Impression
     end
     alias_method :reload, :load
 
+    def prev_page(page)
+      keys = @map.keys
+      case idx = keys.index(page.permalink)
+      when 0, nil
+        nil
+      else
+        @map[keys[idx - 1]][:page]
+      end
+    end
+
+    def next_page(page)
+      keys = @map.keys
+      case idx = keys.index(page.permalink)
+      when keys.size - 1, nil
+        nil
+      else
+        @map[keys[idx + 1]][:page]
+      end
+    end
+
     def load_file(path)
       content = IO.read(path)
     end
@@ -160,6 +180,14 @@ module Impression
   
     def title
       @attributes['title'] || title_from_content
+    end
+
+    def prev_page
+      @opts[:pages].prev_page(self)
+    end
+
+    def next_page
+      @opts[:pages].next_page(self)
     end
   
     TITLE_REGEXP = /^#\s+([^\n]+)/.freeze
