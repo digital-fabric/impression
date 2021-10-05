@@ -223,7 +223,8 @@ module Impression
       {
         entity_output: :numeric,
         syntax_highlighter: :rouge,
-        input: 'GFM'
+        input: 'GFM',
+        hard_wrap: false
       }
     end
 
