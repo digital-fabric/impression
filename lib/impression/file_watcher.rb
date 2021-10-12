@@ -6,18 +6,8 @@ module Impression
   class FileWatcher
     def initialize(spec)
       @notifier = INotify::Notifier.new
+      @buffer = []
       setup(spec)
-      start_io_fiber
-    end
-
-    def start_io_fiber
-      @io_fiber = spin do
-        io = @notifier.to_io
-        loop do
-          io.wait_readable
-          @notifier.process
-        end
-      end
     end
 
     def setup(spec)
@@ -41,19 +31,20 @@ module Impression
         p [event.flags, event.name, event.absolute_name]
         kind = event.flags.first
 
-        @receiver << [kind, event.absolute_name] if @receiver
-        # path = event.absolute_name
-        # if File.file?(path)
-        #   notifier.watch(path, :modify, :delete_self) { |e| handle_changed_file(path) }
-        # end
-        # handle_changed_file(path)
+        @buffer << [kind, event.absolute_name]
       end
     end
 
-    def each
+    def each(&block)
       @receiver = Fiber.current
-      while (entry = receive)
-        yield(entry)
+      io = @notifier.to_io
+      loop do
+        io.wait_readable
+        @notifier.process
+        next if @buffer.empty?
+
+        @buffer.each(&block)
+        @buffer.clear
       end
     end
   end
