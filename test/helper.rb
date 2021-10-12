@@ -3,6 +3,7 @@
 require 'bundler/setup'
 require_relative './coverage' if ENV['COVERAGE']
 require 'minitest/autorun'
+require 'impression'
 
 module Kernel
   def capture_exception

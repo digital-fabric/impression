@@ -27,6 +27,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency      'rouge',                '~>3.26.0'
   s.add_runtime_dependency      'kramdown-parser-gfm',  '~>1.1.0'
 
+  s.add_runtime_dependency      'rb-inotify',           '~>0.10.1'
+  s.add_runtime_dependency      'rubyoshka',            '~>0.7.0'
+
   
   s.add_development_dependency  'rake',                 '~>12.3.3'
   s.add_development_dependency  'minitest',             '~>5.11.3'
