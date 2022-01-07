@@ -6,6 +6,10 @@ require 'minitest/autorun'
 require 'impression'
 
 module Kernel
+  def mock_req(**args)
+    Qeweney::TestAdapter.mock(**args)
+  end
+
   def capture_exception
     yield
   rescue Exception => e
@@ -33,5 +37,11 @@ module Minitest::Assertions
   def assert_in_range exp_range, act
     msg = message(msg) { "Expected #{mu_pp(act)} to be in range #{mu_pp(exp_range)}" }
     assert exp_range.include?(act), msg
+  end
+end
+
+class PathRenderingResource < Impression::Resource
+  def render(req)
+    req.respond(absolute_path)
   end
 end
