@@ -28,7 +28,6 @@ module Impression
 
     def setup_directory(dir)
       @notifier.watch(dir, :moved_to, :create, :move, :attrib, :modify, :delete) do |event|
-        p [event.flags, event.name, event.absolute_name]
         kind = event.flags.first
 
         @buffer << [kind, event.absolute_name]

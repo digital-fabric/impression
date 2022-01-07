@@ -43,7 +43,7 @@ class FileWatcherTest < MiniTest::Test
     IO.write(tmp_file_path, '---')
     FileUtils.mv(tmp_file_path, file2_path)
     sleep 0.01
-    assert_equal [[:move, file2_path]], buffer
+    assert_equal [[:moved_to, file2_path]], buffer
 
     # delete
     buffer.clear
