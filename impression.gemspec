@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
 
   # s.executables   = ['impression']
 
-  s.add_runtime_dependency      'polyphony',            '~>0.67'
-  s.add_runtime_dependency      'tipi',                 '~>0.41'
+  s.add_runtime_dependency      'polyphony',            '~>0.73.1'
+  s.add_runtime_dependency      'tipi',                 '~>0.45'
   s.add_runtime_dependency      'qeweney',              '~>0.14'
   
   s.add_runtime_dependency      'kramdown',             '~>2.3.0'

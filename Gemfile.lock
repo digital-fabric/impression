@@ -31,12 +31,12 @@ PATH
     impression (0.1)
       kramdown (~> 2.3.0)
       kramdown-parser-gfm (~> 1.1.0)
-      polyphony (~> 0.67)
+      polyphony (~> 0.73.1)
       qeweney (~> 0.14)
       rb-inotify (~> 0.10.1)
       rouge (~> 3.26.0)
       rubyoshka (~> 0.7.0)
-      tipi (~> 0.41)
+      tipi (~> 0.45)
 
 GEM
   remote: https://rubygems.org/
