@@ -28,17 +28,16 @@ module Impression
     end
 
     def render(req)
-      if (resource = route(req)) && resource != self
-        resource.render(req)
-      else
-        req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
-      end
+      req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
     end
 
     def route(req)
       path_parts = req.impression_path_parts
-      part = path_parts.shift
-      return nil if part != @path
+
+      if path != '/'
+        part = path_parts.shift
+        return nil if part != @path
+      end
 
       child_part = path_parts[0]
       return self unless child_part
@@ -55,6 +54,13 @@ module Impression
         dir = File.dirname(path)
         FileUtils.mkdir_p(dir) if !File.directory?(dir)
         File.open(path, 'w') { |f| r.render_to_file(f) }
+      end
+    end
+
+    def to_proc
+      ->(req) do
+        resource = route(req) || self
+        resource.render(req)
       end
     end
   end

@@ -2,5 +2,8 @@
 
 module Impression
   class App < Resource
+    def initialize(path: '/', **opts)
+      super(path: path, **opts)
+    end
   end
 end

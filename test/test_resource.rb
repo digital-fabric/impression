@@ -55,23 +55,22 @@ class ResourceTest < MiniTest::Test
     r3 = PathRenderingResource.new(parent: r1, path: 'baz')
 
     req = mock_req(':method' => 'GET', ':path' => '/')
-    r1.render(req)
-    assert_equal Qeweney::Status::NOT_FOUND, req.adapter.status
+    assert_nil r1.route(req)
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
-    r1.render(req)
+    r1.route(req).render(req)
+    # default reply
     assert_equal Qeweney::Status::NOT_FOUND, req.adapter.status
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
-    r1.render(req)
+    r1.route(req).render(req)
     assert_equal '/foo/bar', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
-    r1.render(req)
+    r1.route(req).render(req)
     assert_equal '/foo/baz', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bbb')
-    r1.render(req)
-    assert_equal Qeweney::Status::NOT_FOUND, req.adapter.status
+    assert_nil r1.route(req)
   end
 end
