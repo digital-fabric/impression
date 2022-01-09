@@ -24,6 +24,7 @@ jobs:
       with:
         ruby-version: ${{matrix.ruby}}
         bundler-cache: true # 'bundle install' and cache
+        cache-version: 1
         
     # - name: Install dependencies
     #   run: |
