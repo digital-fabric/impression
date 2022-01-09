@@ -45,3 +45,5 @@ class PathRenderingResource < Impression::Resource
     req.respond(absolute_path)
   end
 end
+
+puts "Polyphony backend: #{Thread.current.backend.kind}"
