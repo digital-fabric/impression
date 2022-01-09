@@ -19,10 +19,12 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{matrix.ruby}}
-        # bundler-cache: true # 'bundle install' and cache
-    - name: Install dependencies
-      run: |
-        gem install bundler
-        POLYPHONY_USE_LIBEV=1 bundle install
+        bundler-cache: true # 'bundle install' and cache
+      env:
+        POLYPHONY_USE_LIBEV: 1
+    # - name: Install dependencies
+    #   run: |
+    #     gem install bundler
+    #     POLYPHONY_USE_LIBEV=1 bundle install
     - name: Run tests
       run:  bundle exec rake test
