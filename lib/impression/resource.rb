@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'qeweney'
 
 module Impression
   class Resource
