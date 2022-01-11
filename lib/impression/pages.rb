@@ -5,7 +5,7 @@ require 'rouge'
 require 'kramdown-parser-gfm'
 require 'yaml'
 require 'rb-inotify'
-require 'rubyoshka'
+require 'papercraft'
 
 require_relative './errors'
 
@@ -18,7 +18,6 @@ module Impression
     end
 
     def initialize(base_path, opts = {})
-    p base_path: base_path
       @base_path = base_path
       @opts = opts
       @opts[:pages] = self
@@ -209,7 +208,7 @@ module Impression
       when :md
         render_markdown
       when :rb
-        render_rubyoshka
+        render_papercraft
       else
         raise "Invalid page kind #{kind.inspect}"
       end
@@ -228,7 +227,7 @@ module Impression
       }
     end
 
-    def render_rubyoshka
+    def render_papercraft
       proc = instance_eval("->(&block) do; #{@content}; end", @full_path, @content_start_line)
       proc.().render(page: self, pages: @opts[:pages])
     end
