@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    impression (0.1)
+    impression (0.2)
       kramdown (~> 2.3.0)
       kramdown-parser-gfm (~> 1.1.0)
       papercraft (~> 0.12)
