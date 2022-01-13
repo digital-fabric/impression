@@ -39,6 +39,25 @@ module Minitest::Assertions
     msg = message(msg) { "Expected #{mu_pp(act)} to be in range #{mu_pp(exp_range)}" }
     assert exp_range.include?(act), msg
   end
+
+  def assert_response exp_body, exp_content_type, req
+    msg = message(msg) { "Expected response body #{mu_pp(act)} to equal #{mu_pp(exp_body)}" }
+    assert_equal exp_body, req.response_body, msg
+
+    return unless exp_content_type
+
+    if Symbol === exp_content_type
+      exp_content_type = Qeweney::MimeTypes[exp_content_type]
+    end
+    msg = message(msg) { "Expected response content type #{mu_pp(act)} to equal #{mu_pp(exp_body)}" }
+    assert_equal exp_content_type, req.response_content_type, msg
+  end
+end
+
+class Impression::Resource
+  def route_and_respond(req)
+    route(req).respond(req)
+  end
 end
 
 class PathRenderingResource < Impression::Resource
@@ -65,6 +84,10 @@ class Qeweney::Request
 
   def response_status
     adapter.status
+  end
+
+  def response_content_type
+    response_headers['Content-Type']
   end
 end
 
