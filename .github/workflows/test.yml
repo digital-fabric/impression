@@ -7,8 +7,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-10.15]
-        ruby: ['2.7', '3.0', 'head']
+        os: [ubuntu-latest, macos-latest]
+        ruby: ['2.7', '3.0', '3.1', 'head']
 
     name: >-
       ${{matrix.os}}, ${{matrix.ruby}}
@@ -19,16 +19,14 @@ jobs:
       POLYPHONY_USE_LIBEV: "1"
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: ruby/setup-ruby@v1
+    - name: Setup machine
+      uses: actions/checkout@v1
+    - name: Setup Ruby and install deps
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{matrix.ruby}}
         bundler-cache: true # 'bundle install' and cache
         cache-version: 1
         
-    # - name: Install dependencies
-    #   run: |
-    #     gem install bundler
-    #     POLYPHONY_USE_LIBEV=1 bundle install
     - name: Run tests
       run:  bundle exec rake test
