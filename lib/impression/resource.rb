@@ -14,7 +14,7 @@ module Impression
   #
   # - `Resource#route` - returns the resource which should respond to the
   #   request.
-  # - `Resource#render` - renders the reply to the request.
+  # - `Resource#respond` - responds to the request.
   #
   class Resource
     # Reference to the parent resource
@@ -67,11 +67,11 @@ module Impression
       self
     end
 
-    # Renders a response to the given request
+    # Responds to the given request by rendering a 404 Not found response.
     #
     # @param req [Qeweney::Request] request
     # @return [void]
-    def render(req)
+    def respond(req)
       req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
     end
 
@@ -122,7 +122,7 @@ module Impression
     def to_proc
       ->(req) do
         resource = route(req) || self
-        resource.render(req)
+        resource.respond(req)
       end
     end
 

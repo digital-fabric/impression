@@ -78,16 +78,16 @@ class ResourceTest < MiniTest::Test
     assert_nil r1.route(req)
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     # default reply
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo/bar', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo/baz', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bbb')
@@ -103,27 +103,27 @@ class ResourceTest < MiniTest::Test
     assert_nil r1.route(req)
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo /', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/zzz')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo /zzz', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo/bar /', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar/zzz')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo/bar /zzz', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo/baz /', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz/xxx/yyy')
-    r1.route(req).render(req)
+    r1.route(req).respond(req)
     assert_equal '/foo/baz /xxx/yyy', req.response_body
   end
 end

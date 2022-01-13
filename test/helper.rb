@@ -42,13 +42,13 @@ module Minitest::Assertions
 end
 
 class PathRenderingResource < Impression::Resource
-  def render(req)
+  def respond(req)
     req.respond(absolute_path)
   end
 end
 
 class CompletePathInfoRenderingResource < Impression::Resource
-  def render(req)
+  def respond(req)
     req.respond("#{absolute_path} #{req.resource_relative_path}")
   end
 end
