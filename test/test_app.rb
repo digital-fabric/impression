@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'helper'
-require 'qeweney/test_adapter'
 
 class AppTest < MiniTest::Test
   def test_empty_app

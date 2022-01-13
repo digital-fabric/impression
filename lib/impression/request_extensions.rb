@@ -5,7 +5,9 @@ require 'qeweney'
 # require_relative './pages'
 require_relative './request_routing'
 
+# Extensions to `Qeweney::Request`
 class Qeweney::Request
+  
   # include Impression::Pages::RequestMethods
   include Impression::RequestRouting
 end

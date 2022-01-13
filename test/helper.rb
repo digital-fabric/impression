@@ -4,6 +4,7 @@ require 'bundler/setup'
 require_relative './coverage' if ENV['COVERAGE']
 require 'minitest/autorun'
 require 'impression'
+require 'qeweney/test_adapter'
 
 module Kernel
   def mock_req(**args)
@@ -43,6 +44,27 @@ end
 class PathRenderingResource < Impression::Resource
   def render(req)
     req.respond(absolute_path)
+  end
+end
+
+class CompletePathInfoRenderingResource < Impression::Resource
+  def render(req)
+    req.respond("#{absolute_path} #{req.resource_relative_path}")
+  end
+end
+
+# Extensions to be used in conjunction with `Qeweney::TestAdapter`
+class Qeweney::Request
+  def response_headers
+    adapter.headers
+  end
+
+  def response_body
+    adapter.body
+  end
+
+  def response_status
+    adapter.status
   end
 end
 
