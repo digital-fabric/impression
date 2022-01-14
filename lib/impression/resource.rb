@@ -126,6 +126,18 @@ module Impression
       end
     end
 
+    def text_response(text, **headers)
+      ->(req) { req.respond_text(text, **headers) }
+    end
+
+    def html_response(html, **headers)
+      ->(req) { req.respond_html(html, **headers) }
+    end
+
+    def json_response(object, **headers)
+      ->(req) { req.respond_json(object, **headers) }
+    end
+
     private
 
     SLASH_PREFIXED_PATH_REGEXP = /^\//.freeze

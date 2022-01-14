@@ -3,11 +3,13 @@
 require 'qeweney'
 
 # require_relative './pages'
-require_relative './request_routing'
+require_relative './request_extensions/routing'
+require_relative './request_extensions/responses'
 
 # Extensions to `Qeweney::Request`
 class Qeweney::Request
   
   # include Impression::Pages::RequestMethods
-  include Impression::RequestRouting
+  include Impression::RequestExtensions::Routing
+  include Impression::RequestExtensions::Responses
 end

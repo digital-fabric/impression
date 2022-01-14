@@ -166,4 +166,36 @@ class ResourceTest < MiniTest::Test
     r1.route_and_call(req)
     assert_equal 'bye', req.response_body
   end
+
+  def test_text_response
+    c = Class.new(Impression::Resource) do
+      def route(req)
+        case req.path
+        when '/text'
+          text_response('foo')
+        when '/html'
+          html_response('bar')
+        when '/json'
+          json_response({ :baz => 123 })
+        end
+      end
+    end
+
+    r = c.new(path: '/')
+
+    req = mock_req(':method' => 'GET', ':path' => '/text')
+    r.route_and_call(req)
+    assert_equal 'foo', req.response_body
+    assert_equal 'text/plain', req.response_content_type
+
+    req = mock_req(':method' => 'GET', ':path' => '/html')
+    r.route_and_call(req)
+    assert_equal 'bar', req.response_body
+    assert_equal 'text/html', req.response_content_type
+
+    req = mock_req(':method' => 'GET', ':path' => '/json')
+    r.route_and_call(req)
+    assert_equal '{"baz":123}', req.response_body
+    assert_equal 'application/json', req.response_content_type
+  end
 end
