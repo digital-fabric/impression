@@ -22,7 +22,7 @@ module Impression
     #
     # @param req [Qeweney::Request] request
     # @return [void]
-    def respond(req)
+    def call(req)
       path_info = get_path_info(req.resource_relative_path)
       render_from_path_info(req, *path_info)
     end

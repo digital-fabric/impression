@@ -78,16 +78,16 @@ class ResourceTest < MiniTest::Test
     assert_nil r1.route(req)
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     # default reply
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo/bar', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo/baz', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bbb')
@@ -103,27 +103,67 @@ class ResourceTest < MiniTest::Test
     assert_nil r1.route(req)
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo /', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/zzz')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo /zzz', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo/bar /', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar/zzz')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo/bar /zzz', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo/baz /', req.response_body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz/xxx/yyy')
-    r1.route(req).respond(req)
+    r1.route_and_call(req)
     assert_equal '/foo/baz /xxx/yyy', req.response_body
+  end
+
+  class CallableResource < Impression::Resource
+    def initialize(**props, &block)
+      super(**props)
+      @block = block
+    end
+
+    def call(req)
+      @block.call(req)
+    end
+  end
+
+  def test_callable_resource
+    r1 = CompletePathInfoRenderingResource.new(path: 'foo')
+    r2 = CallableResource.new(parent: r1, path: 'bar') { |req| req.respond('hi') }
+
+    req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
+    r1.route_and_call(req)
+    assert_equal 'hi', req.response_body
+  end
+
+  class CallableRouteResource < Impression::Resource
+    def initialize(**props, &block)
+      super(**props)
+      @block = block
+    end
+
+    def route(req)
+      @block
+    end
+  end
+
+  def test_callable_from_route_method
+    r1 = CompletePathInfoRenderingResource.new(path: 'foo')
+    r2 = CallableRouteResource.new(parent: r1, path: 'bar') { |req| req.respond('bye') }
+
+    req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
+    r1.route_and_call(req)
+    assert_equal 'bye', req.response_body
   end
 end

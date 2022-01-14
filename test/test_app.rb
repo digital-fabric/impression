@@ -7,7 +7,7 @@ class AppTest < MiniTest::Test
     app = Impression::App.new(path: '/')
     req = mock_req(':method' => 'GET', ':path' => '/')
 
-    app.respond(req)
+    app.call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.adapter.status
   end
 

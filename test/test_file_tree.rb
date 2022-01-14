@@ -30,43 +30,43 @@ class FileTreeTest < MiniTest::Test
 
   def test_file_tree_response
     req = mock_req(':method' => 'GET', ':path' => '/roo')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/foo2')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/bar2')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/js/a.js')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('js/a.js'), :js, req
 
     req = mock_req(':method' => 'GET', ':path' => '/foo.html')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('foo.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('foo.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/index.html')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('index.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('index.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/bar/index.html')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('bar/index.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/bar')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('bar/index.html'), :html, req
   end
 
@@ -74,43 +74,43 @@ class FileTreeTest < MiniTest::Test
     @file_tree = Impression::FileTree.new(path: '/app', directory: STATIC_PATH)
 
     req = mock_req(':method' => 'GET', ':path' => '/app/roo')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/app/foo2')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/app/bar2')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::NOT_FOUND, req.response_status
 
     req = mock_req(':method' => 'GET', ':path' => '/app/js/a.js')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('js/a.js'), :js, req
 
     req = mock_req(':method' => 'GET', ':path' => '/app/foo.html')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('foo.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/app/foo')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('foo.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/app/index.html')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('index.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/app/')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('index.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/app/bar/index.html')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('bar/index.html'), :html, req
 
     req = mock_req(':method' => 'GET', ':path' => '/app/bar')
-    @file_tree.route_and_respond(req)
+    @file_tree.route_and_call(req)
     assert_response static('bar/index.html'), :html, req
   end
 end

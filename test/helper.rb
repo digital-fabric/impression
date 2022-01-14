@@ -55,19 +55,19 @@ module Minitest::Assertions
 end
 
 class Impression::Resource
-  def route_and_respond(req)
-    route(req).respond(req)
+  def route_and_call(req)
+    route(req).call(req)
   end
 end
 
 class PathRenderingResource < Impression::Resource
-  def respond(req)
+  def call(req)
     req.respond(absolute_path)
   end
 end
 
 class CompletePathInfoRenderingResource < Impression::Resource
-  def respond(req)
+  def call(req)
     req.respond("#{absolute_path} #{req.resource_relative_path}")
   end
 end

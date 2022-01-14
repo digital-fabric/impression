@@ -71,7 +71,7 @@ module Impression
     #
     # @param req [Qeweney::Request] request
     # @return [void]
-    def respond(req)
+    def call(req)
       req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
     end
 
@@ -122,7 +122,7 @@ module Impression
     def to_proc
       ->(req) do
         resource = route(req) || self
-        resource.respond(req)
+        resource.call(req)
       end
     end
 
