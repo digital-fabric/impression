@@ -126,14 +126,29 @@ module Impression
       end
     end
 
+    # Returns a callable that responds with plain text using the given
+    # parameters.
+    #
+    # @param text [String] response body
+    # @param **headers [Hash] additional response headers
     def text_response(text, **headers)
       ->(req) { req.respond_text(text, **headers) }
     end
 
+    # Returns a callable that responds with HTML using the given
+    # parameters.
+    #
+    # @param html [String] response body
+    # @param **headers [Hash] additional response headers
     def html_response(html, **headers)
       ->(req) { req.respond_html(html, **headers) }
     end
 
+    # Returns a callable that responds with JSON using the given
+    # parameters.
+    #
+    # @param object [any] object to be converted to JSON
+    # @param **headers [Hash] additional response headers
     def json_response(object, **headers)
       ->(req) { req.respond_json(object, **headers) }
     end

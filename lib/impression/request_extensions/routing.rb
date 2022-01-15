@@ -2,6 +2,7 @@
 
 module Impression
   
+  # Extensions for `Qeweney::Request`
   module RequestExtensions
 
     # Routing extensions for `Qeweney::Request`
