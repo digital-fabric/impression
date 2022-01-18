@@ -41,16 +41,16 @@ module Minitest::Assertions
   end
 
   def assert_response exp_body, exp_content_type, req
-    msg = message(msg) { "Expected response body #{mu_pp(act)} to equal #{mu_pp(exp_body)}" }
-    assert_equal exp_body, req.response_body, msg
+    actual = req.response_body
+    assert_equal exp_body, actual
 
     return unless exp_content_type
 
     if Symbol === exp_content_type
       exp_content_type = Qeweney::MimeTypes[exp_content_type]
     end
-    msg = message(msg) { "Expected response content type #{mu_pp(act)} to equal #{mu_pp(exp_body)}" }
-    assert_equal exp_content_type, req.response_content_type, msg
+    actual = req.response_content_type
+    assert_equal exp_content_type, actual
   end
 end
 

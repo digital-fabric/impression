@@ -56,19 +56,24 @@ module Impression
     # Calculates the path info for the given relative path.
     #
     # @param path [String] relative path
-    # @param add_html_ext [bool] whether to add .html extension if not found
+    # @param add_ext [bool] whether to add .html extension if not found
     # @return [Array] path info
-    def calculate_path_info(path, add_html_ext = true)
+    def calculate_path_info(path, add_ext = true)
       full_path = File.join(@directory, path)
 
-      stat = File.stat(full_path) rescue nil
+      path_info(full_path) || (add_ext && path_info("#{full_path}.html")) || [:not_found]
+    end
+
+    private
+    
+    def path_info(path)
+      stat = File.stat(path) rescue nil
       if !stat
-        return add_html_ext ?
-          calculate_path_info("#{path}.html", false) : [:not_found]
+        nil
       elsif stat.directory?
-        return calculate_directory_path_info(full_path)
+        return directory_path_info(path)
       else
-        return [:file, full_path]
+        return [:file, path]
       end
     end
 
@@ -77,13 +82,8 @@ module Impression
     #
     # @param path [String] directory path
     # @return [Array] path info
-    def calculate_directory_path_info(path)
-      index_path = File.join(path, 'index.html')
-      if File.file?(index_path)
-        [:file, index_path]
-      else
-        [:not_found]
-      end
+    def directory_path_info(path)
+      path_info(File.join(path, 'index.html'))
     end
   end
 end
