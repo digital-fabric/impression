@@ -10,7 +10,10 @@ Gem::Specification.new do |s|
   s.files       = `git ls-files`.split
   s.homepage    = 'http://github.com/digital-fabric/impression'
   s.metadata    = {
-    "source_code_uri" => "https://github.com/digital-fabric/impression"
+    "source_code_uri" => "https://github.com/digital-fabric/impression",
+    "documentation_uri" => "https://www.rubydoc.info/gems/impression",
+    "homepage_uri" => "https://github.com/digital-fabric/impression",
+    "changelog_uri" => "https://github.com/digital-fabric/impression/blob/master/CHANGELOG.md"
   }
   s.rdoc_options = ["--title", "impression", "--main", "README.md"]
   s.extra_rdoc_files = ["README.md"]
@@ -23,10 +26,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency      'tipi',                 '~>0.45'
   s.add_runtime_dependency      'qeweney',              '~>0.15'
   
-  s.add_runtime_dependency      'kramdown',             '~>2.3.0'
-  s.add_runtime_dependency      'rouge',                '~>3.26.0'
-  s.add_runtime_dependency      'kramdown-parser-gfm',  '~>1.1.0'
-
   # s.add_runtime_dependency      'rb-inotify',           '~>0.10.1'
   s.add_runtime_dependency      'papercraft',            '~>0.14'
   s.add_runtime_dependency      'modulation',           '~>1.1'

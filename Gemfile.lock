@@ -2,13 +2,10 @@ PATH
   remote: .
   specs:
     impression (0.3)
-      kramdown (~> 2.3.0)
-      kramdown-parser-gfm (~> 1.1.0)
       modulation (~> 1.1)
       papercraft (~> 0.14)
       polyphony (~> 0.73.1)
       qeweney (~> 0.15)
-      rouge (~> 3.26.0)
       tipi (~> 0.45)
 
 GEM
