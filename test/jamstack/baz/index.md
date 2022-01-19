@@ -1,0 +1,7 @@
+---
+title: BarBar
+---
+
+<h1>BarIndex</h1>
+
+

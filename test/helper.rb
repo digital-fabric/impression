@@ -42,7 +42,7 @@ module Minitest::Assertions
 
   def assert_response exp_body, exp_content_type, req
     actual = req.response_body
-    assert_equal exp_body, actual
+    assert_equal exp_body.gsub("\n", ''), actual&.gsub("\n", '')
 
     return unless exp_content_type
 

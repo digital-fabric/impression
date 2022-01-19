@@ -39,33 +39,49 @@ module Impression
       when :not_found
         req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
       when :file
-        req.serve_file(path_info[:path])
+        render_file(req, path_info)
       else
         raise "Invalid path info kind #{kind.inspect}"
       end
     end
 
+    private
+
+    # Renders a file response for the given request and the given path info.
+    #
+    # @param req [Qeweney::Request] request
+    # @param path_info [Hash] path info
+    # @return [void]
+    def render_file(req, path_info)
+      req.serve_file(path_info[:path])
+    end
+
     # Returns the path info for the given relative path.
     #
     # @param path [String] relative path
-    # @return [Array] path info (a tuple comprising kind and file path)
+    # @return [Hash] path info
     def get_path_info(path)
-      @path_info_cache[path] || calculate_path_info(path)
+      @path_info_cache[path] ||= calculate_path_info(path)
     end
 
     # Calculates the path info for the given relative path.
     #
     # @param path [String] relative path
     # @param add_ext [bool] whether to add .html extension if not found
-    # @return [Array] path info
+    # @return [Hash] path info
     def calculate_path_info(path)
       full_path = File.join(@directory, path)
 
       path_info(full_path) || search_path_info_with_extension(full_path) || { kind: :not_found }
     end
 
-    private
-    
+    # Returns the path info for the given path. If the path refers to a file,
+    # returns a hash containing the file information. If the path refers to a
+    # directory, performs a search for an index file using #directory_path_info.
+    # Otherwise, returns nil.
+    #
+    # @param path [String] path
+    # @return [Hash, nil] path info
     def path_info(path)
       stat = File.stat(path) rescue nil
       if !stat
@@ -77,19 +93,26 @@ module Impression
       end
     end
 
-    # Calculates the path info for a directory. If an `index.html` file exists,
-    # its path info is returned, otherwise a `:not_found` path info is returned.
+    # Calculates the path info for a directory. If an index file exists, its
+    # path info is returned, otherwise, returns nil.
     #
     # @param path [String] directory path
-    # @return [Array] path info
+    # @return [Hash, nil] path info
     def directory_path_info(path)
       search_path_info_with_extension(File.join(path, 'index'))
     end
 
+    # Returns the supported path extensions for paths without extension.
+    #
+    # @return [Array] supported extensions
     def supported_path_extensions
       [:html]
     end
 
+    # Searches for files with extensions for the given path.
+    #
+    # @param path [String] path
+    # @return [Hash, nil] path info
     def search_path_info_with_extension(path)
       supported_path_extensions.each do |ext|
         info = path_info("#{path}.#{ext}")
