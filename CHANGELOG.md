@@ -1,3 +1,5 @@
+# 0.3 2022-01-19
+
 - Implement basic Jamstack resource (#5)
 - Add support for stock callable responses (#4)
 - Make resource callable, rename `#respond` to `#callable` (#3)
