@@ -1,3 +1,7 @@
+# 0.4 2022-01-19
+
+- Remove deprecated Pages code (#6)
+
 # 0.3 2022-01-19
 
 - Implement basic Jamstack resource (#5)
