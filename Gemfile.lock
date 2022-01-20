@@ -85,7 +85,7 @@ GEM
     websocket (1.2.9)
 
 PLATFORMS
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   impression!
