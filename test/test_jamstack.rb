@@ -240,4 +240,24 @@ class JamstackTest < MiniTest::Test
       },
     ], list
   end
+
+  def test_template_resource_and_request
+    req = mock_req(':method' => 'GET', ':path' => '/foobar?q=42')
+    @jamstack.route_and_call(req)
+  
+    foo = H {
+      html5 {
+        head {
+          title 'Foobar'
+        }
+        body {
+          h1 '42'
+          a 'MMM', href: '/articles/2008-06-14-manu'
+          a 'NNN', href: '/articles/2009-06-12-noatche'
+          a 'AAA', href: '/articles/a'
+        }
+      }
+    }
+    assert_response foo.render, :html, req
+  end
 end

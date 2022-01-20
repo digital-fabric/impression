@@ -104,7 +104,7 @@ module Impression
     def render_papercraft_module(req, path)
       mod = import path
 
-      html = H(mod).render
+      html = H(mod).render(request: req, resource: self)
       req.respond(html, 'Content-Type' => Qeweney::MimeTypes[:html])
     end
 
@@ -118,7 +118,7 @@ module Impression
 
       layout = get_layout(attributes[:layout])
 
-      html = layout.render(**attributes) { emit_markdown markdown }
+      html = layout.render(request: req, resource: self, **attributes) { emit_markdown markdown }
       req.respond(html, 'Content-Type' => Qeweney::MimeTypes[:html])
     end
 

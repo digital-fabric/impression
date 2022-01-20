@@ -50,7 +50,7 @@ GEM
     localhost (1.1.9)
     minitest (5.11.3)
     modulation (1.1)
-    msgpack (1.4.2)
+    msgpack (1.4.3)
     multipart-post (2.1.1)
     papercraft (0.14)
       escape_utils (= 1.2.1)
@@ -85,7 +85,7 @@ GEM
     websocket (1.2.9)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   impression!
