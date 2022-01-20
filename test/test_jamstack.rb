@@ -116,7 +116,7 @@ class JamstackTest < MiniTest::Test
     assert_response a.render, :html, req
   end
 
-  def test_non_root_file_tree_response
+  def test_non_root_jamstack_response
     @jamstack = Impression::Jamstack.new(path: '/app', directory: JAMSTACK_PATH)
 
     req = mock_req(':method' => 'GET', ':path' => '/app/roo')
@@ -204,5 +204,40 @@ class JamstackTest < MiniTest::Test
       }
     }
     assert_response a.render, :html, req
+  end
+
+  def test_page_list
+    @jamstack = Impression::Jamstack.new(path: '/app', directory: JAMSTACK_PATH)
+
+    list = @jamstack.page_list('/')
+    assert_equal [
+      { path: File.join(JAMSTACK_PATH, 'bar.html'), url: '/app/bar' },
+      { path: File.join(JAMSTACK_PATH, 'index.md'), title: 'Hello', url: '/app/index' },
+    ], list
+
+
+    list = @jamstack.page_list('/articles')
+    assert_equal [
+      {
+        path: File.join(JAMSTACK_PATH, 'articles/2008-06-14-manu.md'),
+        url: '/app/articles/2008-06-14-manu',
+        title: 'MMM',
+        layout: 'article',
+        date: Date.new(2008, 06, 14)
+      },
+      {
+        path: File.join(JAMSTACK_PATH, 'articles/2009-06-12-noatche.md'),
+        url: '/app/articles/2009-06-12-noatche',
+        title: 'NNN',
+        layout: 'article',
+        date: Date.new(2009, 06, 12)
+      },
+      { 
+        path: File.join(JAMSTACK_PATH, 'articles/a.md'),
+        url: '/app/articles/a',
+        title: 'AAA',
+        layout: 'article'
+      },
+    ], list
   end
 end

@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'yaml'
+require 'date'
 require 'modulation'
 require 'papercraft'
 
@@ -17,7 +18,67 @@ module Impression
       @layouts = {}
     end
 
+    # Returns a list of pages found in the given directory (relative to the base
+    # directory). Each entry containins the absolute file path, the pretty URL,
+    # the possible date parsed from the file name, and any other front matter
+    # attributes (for .md files). This method will detect only pages with the
+    # extensions .html, .md, .rb. The returned entries are sorted by file path.
+    #
+    # @param dir [String] relative directory
+    # @return [Array<Hash>] array of page entries
+    def page_list(dir)
+      base = File.join(@directory, dir)
+      Dir.glob('*.{html,md}', base: base)
+        .map { |fn| page_entry(fn, dir) }
+        .sort_by { |i| i[:path] }
+    end
+
     private
+
+    DATE_REGEXP = /^(\d{4}\-\d{2}\-\d{2})/.freeze
+    MARKDOWN_PAGE_REGEXP = /\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)/m.freeze
+    MD_EXT_REGEXP = /\.md$/.freeze
+    PAGE_EXT_REGEXP = /^(.+)\.(md|html|rb)$/.freeze
+    INDEX_PAGE_REGEXP = /^(.+)\/index$/.freeze
+
+    # Returns a page entry for the given file.
+    #
+    # @param fn [String] file name
+    # @param dir [String] relative directory
+    # @return [Hash] page entry
+    def page_entry(fn, dir)
+      relative_path = File.join(dir, fn)
+      absolute_path = File.join(@directory, relative_path)
+      info = {
+        path: absolute_path,
+        url: pretty_url(relative_path)
+      }
+      if fn =~ MD_EXT_REGEXP
+        atts, _ = parse_markdown_file(absolute_path)
+        info.merge!(atts)
+      end
+
+      if (m = fn.match(DATE_REGEXP))
+        info[:date] ||= Date.parse(m[1])
+      end
+
+      info
+    end
+
+    # Returns the pretty URL for the given relative path. For pages, the
+    # extension is removed. For index pages, the index suffix is removed.
+    #
+    # @param relative_path [String] relative path
+    # @return [String] pretty URL
+    def pretty_url(relative_path)
+      if (m = relative_path.match(PAGE_EXT_REGEXP))
+        relative_path = m[1]
+      end
+      if (m = relative_path.match(INDEX_PAGE_REGEXP))
+        relative_path = m[1]
+      end
+      File.join(absolute_path, relative_path)
+    end
 
     # Renders a file response for the given request and the given path info.
     #
@@ -73,8 +134,6 @@ module Impression
       
       import path
     end
-
-    MARKDOWN_PAGE_REGEXP = /\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)/m.freeze
   
     # Parses the markdown file at the given path.
     #
@@ -82,13 +141,23 @@ module Impression
     # @return [Array] an tuple containing properties<Hash>, contents<String>
     def parse_markdown_file(path)
       data = IO.read(path) || ''
+      atts = {}
+
+      # Parse date from file name
+      if (m = path.match(DATE_REGEXP))
+        atts[:date] ||= Date.parse(m[1])
+      end
+
       if (m = data.match(MARKDOWN_PAGE_REGEXP))
         front_matter = m[1]
-
-        [symbolize_keys(YAML.load(front_matter)), m.post_match]
-      else
-        [{}, data]
+        data = m.post_match
+        
+        YAML.load(front_matter).each_with_object(atts) do |(k, v), h|
+          h[k.to_sym] = v
+        end
       end
+        
+      [atts, data]
     end
 
     # Converts a hash with string keys to one with symbol keys.
@@ -96,7 +165,7 @@ module Impression
     # @param hash [Hash] input hash
     # @return [Hash] output hash
     def symbolize_keys(hash)
-      hash.each_with_object({}) { |(k, v), h| h[k.to_sym] = v }
+      
     end
 
     # Returns the supported path extensions used for searching for files based
