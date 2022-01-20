@@ -1,3 +1,8 @@
+# 0.5 2022-01-20
+
+- Pass resource and request to rendered templates (#8)
+- Implement Jamstack#page_list method (#7)
+
 # 0.4 2022-01-19
 
 - Remove deprecated Pages code (#6)
