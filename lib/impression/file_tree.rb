@@ -27,8 +27,6 @@ module Impression
       render_from_path_info(req, path_info)
     end
 
-    private
-
     # Renders a response from the given response kind and path.
     #
     # @param req [Qeweney::Request] request
@@ -46,6 +44,9 @@ module Impression
     end
 
     private
+
+    PAGE_EXT_REGEXP = /^(.+)\.html$/.freeze
+    INDEX_PAGE_REGEXP = /^(.+)?\/index$/.freeze
 
     # Renders a file response for the given request and the given path info.
     #
@@ -89,8 +90,37 @@ module Impression
       elsif stat.directory?
         return directory_path_info(path)
       else
-        return { kind: :file, path: path, ext: File.extname(path) }
+        file_info(path)
       end
+    end
+
+    # Returns the path info for the given file path.
+    #
+    # @param path [String] file path
+    # @return [Hash] path info
+    def file_info(path)
+      relative_path = path.gsub(/^#{@directory}/, '')
+      {
+        kind: :file,
+        path: path,
+        ext: File.extname(path),
+        url: pretty_url(relative_path)
+      }
+    end
+
+    # Returns the pretty URL for the given relative path. For pages, the
+    # extension is removed. For index pages, the index suffix is removed.
+    #
+    # @param relative_path [String] relative path
+    # @return [String] pretty URL
+    def pretty_url(relative_path)
+      if (m = relative_path.match(PAGE_EXT_REGEXP))
+        relative_path = m[1]
+      end
+      if (m = relative_path.match(INDEX_PAGE_REGEXP))
+        relative_path = m[1] || '/'
+      end
+      File.join(absolute_path, relative_path)
     end
 
     # Calculates the path info for a directory. If an index file exists, its

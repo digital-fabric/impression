@@ -113,4 +113,42 @@ class FileTreeTest < MiniTest::Test
     @file_tree.route_and_call(req)
     assert_response static('bar/index.html'), :html, req
   end
+
+  def path_info(path)
+    @file_tree.send(:get_path_info, path)
+  end
+
+  def test_path_info
+    assert_equal({
+      kind: :file,
+      path: File.join(__dir__, 'static/index.html'),
+      ext: '.html',
+      url:  '/'
+    },  path_info('/index.html'))
+
+    assert_equal({
+      kind: :file,
+      path: File.join(__dir__, 'static/index.html'),
+      ext: '.html',
+      url:  '/'
+    },  path_info('/index'))
+
+    assert_equal({
+      kind: :file,
+      path: File.join(__dir__, 'static/index.html'),
+      ext: '.html',
+      url:  '/'
+    },  path_info('/'))
+
+    assert_equal({
+      kind: :file,
+      path: File.join(__dir__, 'static/js/a.js'),
+      ext: '.js',
+      url:  '/js/a.js'
+    },  path_info('/js/a.js'))
+
+    assert_equal({
+      kind: :not_found,
+    },  path_info('/js/b.js'))
+  end
 end
