@@ -24,10 +24,10 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency      'polyphony',            '~>0.73.1'
   s.add_runtime_dependency      'tipi',                 '~>0.45'
-  s.add_runtime_dependency      'qeweney',              '~>0.15'
+  s.add_runtime_dependency      'qeweney',              '~>0.16'
   
   # s.add_runtime_dependency      'rb-inotify',           '~>0.10.1'
-  s.add_runtime_dependency      'papercraft',            '~>0.14'
+  s.add_runtime_dependency      'papercraft',            '~>0.15'
   s.add_runtime_dependency      'modulation',           '~>1.1'
 
   
