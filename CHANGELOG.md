@@ -1,3 +1,8 @@
+# 0.6 2022-01-22
+
+- Unify page_list entries and page_info cache entries (#10)
+- Refactor FileTree#path_info to return more information
+
 # 0.5 2022-01-20
 
 - Pass resource and request to rendered templates (#8)
