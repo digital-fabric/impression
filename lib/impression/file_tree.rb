@@ -120,7 +120,7 @@ module Impression
       if (m = relative_path.match(INDEX_PAGE_REGEXP))
         relative_path = m[1] || '/'
       end
-      File.join(absolute_path, relative_path)
+      relative_path == '/' ? absolute_path : File.join(absolute_path, relative_path)
     end
 
     # Calculates the path info for a directory. If an index file exists, its

@@ -108,7 +108,7 @@ class JamstackTest < MiniTest::Test
         }
         body {
           article {
-            h2 'BBB', id: 'bbb'
+            h2 'ZZZ', id: 'zzz'
           }
         }
       }
@@ -198,7 +198,7 @@ class JamstackTest < MiniTest::Test
         }
         body {
           article {
-            h2 'BBB', id: 'bbb'
+            h2 'ZZZ', id: 'zzz'
           }
         }
       }
@@ -211,32 +211,43 @@ class JamstackTest < MiniTest::Test
 
     list = @jamstack.page_list('/')
     assert_equal [
-      { path: File.join(JAMSTACK_PATH, 'bar.html'), url: '/app/bar' },
-      { path: File.join(JAMSTACK_PATH, 'index.md'), title: 'Hello', url: '/app/index' },
+      { kind: :file, path: File.join(JAMSTACK_PATH, 'bar.html'), ext: '.html', url: '/app/bar' },
+      { kind: :file, path: File.join(JAMSTACK_PATH, 'index.md'), ext: '.md', url: '/app', 
+        title: 'Hello', foo: 'BarBar', markdown_content: '<h1>Index</h1>' },
     ], list
 
 
     list = @jamstack.page_list('/articles')
+
     assert_equal [
       {
+        kind: :file,
         path: File.join(JAMSTACK_PATH, 'articles/2008-06-14-manu.md'),
         url: '/app/articles/2008-06-14-manu',
+        ext: '.md',
         title: 'MMM',
         layout: 'article',
+        markdown_content: "## BBB\n",
         date: Date.new(2008, 06, 14)
       },
       {
+        kind: :file,
         path: File.join(JAMSTACK_PATH, 'articles/2009-06-12-noatche.md'),
         url: '/app/articles/2009-06-12-noatche',
+        ext: '.md',
         title: 'NNN',
         layout: 'article',
+        markdown_content: "## CCC\n",
         date: Date.new(2009, 06, 12)
       },
       { 
+        kind: :file,
         path: File.join(JAMSTACK_PATH, 'articles/a.md'),
         url: '/app/articles/a',
+        ext: '.md',
         title: 'AAA',
-        layout: 'article'
+        layout: 'article',
+        markdown_content: "## ZZZ\n"
       },
     ], list
   end
@@ -259,5 +270,42 @@ class JamstackTest < MiniTest::Test
       }
     }
     assert_response foo.render, :html, req
+  end
+
+  def path_info(path)
+    @jamstack.send(:get_path_info, path)
+  end
+
+  def test_path_info
+    assert_equal({
+      kind: :file,
+      path: File.join(JAMSTACK_PATH, 'index.md'),
+      ext: '.md',
+      url:  '/',
+      title: 'Hello',
+      foo: 'BarBar',
+      markdown_content: '<h1>Index</h1>'
+    },  path_info('/index'))
+
+    assert_equal({
+      kind: :file,
+      path: File.join(JAMSTACK_PATH, 'index.md'),
+      ext: '.md',
+      url:  '/',
+      title: 'Hello',
+      foo: 'BarBar',
+      markdown_content: '<h1>Index</h1>'
+    },  path_info('/'))
+
+    assert_equal({
+      kind: :file,
+      path: File.join(JAMSTACK_PATH, 'assets/js/a.js'),
+      ext: '.js',
+      url:  '/assets/js/a.js'
+    },  path_info('/assets/js/a.js'))
+
+    assert_equal({
+      kind: :not_found,
+    },  path_info('/js/b.js'))
   end
 end

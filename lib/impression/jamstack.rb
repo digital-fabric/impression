@@ -29,39 +29,36 @@ module Impression
     def page_list(dir)
       base = File.join(@directory, dir)
       Dir.glob('*.{html,md}', base: base)
-        .map { |fn| page_entry(fn, dir) }
+        .map { |fn| get_path_info(File.join(dir, fn)) }# page_entry(fn, dir) }
         .sort_by { |i| i[:path] }
     end
 
     private
 
-    DATE_REGEXP = /^(\d{4}\-\d{2}\-\d{2})/.freeze
+    DATE_REGEXP = /(\d{4}\-\d{2}\-\d{2})/.freeze
     MARKDOWN_PAGE_REGEXP = /\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)/m.freeze
     MD_EXT_REGEXP = /\.md$/.freeze
     PAGE_EXT_REGEXP = /^(.+)\.(md|html|rb)$/.freeze
-    INDEX_PAGE_REGEXP = /^(.+)\/index$/.freeze
+    INDEX_PAGE_REGEXP = /^(.+)?\/index$/.freeze
 
-    # Returns a page entry for the given file.
+    # Returns the path info for the given file path.
     #
-    # @param fn [String] file name
-    # @param dir [String] relative directory
-    # @return [Hash] page entry
-    def page_entry(fn, dir)
-      relative_path = File.join(dir, fn)
-      absolute_path = File.join(@directory, relative_path)
-      info = {
-        path: absolute_path,
-        url: pretty_url(relative_path)
-      }
-      if fn =~ MD_EXT_REGEXP
-        atts, _ = parse_markdown_file(absolute_path)
-        info.merge!(atts)
+    # @param path [String] file path
+    # @return [Hash] path info
+    def file_info(path)
+      info = super
+      case info[:ext]
+      when '.md'
+        atts, content = parse_markdown_file(path)
+        info = info.merge(atts)
+        info[:markdown_content] = content
+      when '.rb'
+        info[:module] = import(path)
       end
-
-      if (m = fn.match(DATE_REGEXP))
+      if (m = path.match(DATE_REGEXP))
         info[:date] ||= Date.parse(m[1])
       end
-
+  
       info
     end
 
@@ -75,9 +72,9 @@ module Impression
         relative_path = m[1]
       end
       if (m = relative_path.match(INDEX_PAGE_REGEXP))
-        relative_path = m[1]
+        relative_path = m[1] || '/'
       end
-      File.join(absolute_path, relative_path)
+      relative_path == '/' ? absolute_path : File.join(absolute_path, relative_path)
     end
 
     # Renders a file response for the given request and the given path info.
@@ -88,9 +85,9 @@ module Impression
     def render_file(req, path_info)
       case path_info[:ext]
       when '.rb'
-        render_papercraft_module(req, path_info[:path])
+        render_papercraft_module(req, path_info)
       when '.md'
-        render_markdown_file(req, path_info[:path])
+        render_markdown_file(req, path_info)
       else
         req.serve_file(path_info[:path])
       end
@@ -99,26 +96,24 @@ module Impression
     # Renders a Papercraft module. The module is loaded using Modulation.
     #
     # @param req [Qeweney::Request] reqest
-    # @param path [String] file path
+    # @param path_info [Hash] path info
     # @return [void]
-    def render_papercraft_module(req, path)
-      mod = import path
-
-      html = H(mod).render(request: req, resource: self)
+    def render_papercraft_module(req, path_info)
+      html = H(path_info[:module]).render(request: req, resource: self)
       req.respond(html, 'Content-Type' => Qeweney::MimeTypes[:html])
     end
 
     # Renders a markdown file using a layout.
     #
     # @param req [Qeweney::Request] reqest
-    # @param path [String] file path
+    # @param path_info [Hash] path info
     # @return [void]
-    def render_markdown_file(req, path)
-      attributes, markdown = parse_markdown_file(path)
+    def render_markdown_file(req, path_info)
+      layout = get_layout(path_info[:layout])
 
-      layout = get_layout(attributes[:layout])
-
-      html = layout.render(request: req, resource: self, **attributes) { emit_markdown markdown }
+      html = layout.render(request: req, resource: self, **path_info) {
+        emit_markdown path_info[:markdown_content]
+      }
       req.respond(html, 'Content-Type' => Qeweney::MimeTypes[:html])
     end
 
@@ -158,14 +153,6 @@ module Impression
       end
         
       [atts, data]
-    end
-
-    # Converts a hash with string keys to one with symbol keys.
-    #
-    # @param hash [Hash] input hash
-    # @return [Hash] output hash
-    def symbolize_keys(hash)
-      
     end
 
     # Returns the supported path extensions used for searching for files based
