@@ -1,3 +1,7 @@
+# 0.7 2022-01-23
+
+- Update Papercraft, Refactor Jamstack resource
+
 # 0.6 2022-01-22
 
 - Unify page_list entries and page_info cache entries (#10)
