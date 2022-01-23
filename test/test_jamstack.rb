@@ -48,7 +48,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/foo')
     @jamstack.route_and_call(req)
 
-    foo = H {
+    foo = Papercraft.html {
       html5 {
         head {
           title 'Foo title'
@@ -63,7 +63,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/index')
     @jamstack.route_and_call(req)
 
-    index = H {
+    index = Papercraft.html {
       html5 {
         head {
           title 'Hello'
@@ -86,7 +86,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/baz')
     @jamstack.route_and_call(req)
 
-    baz_index = H {
+    baz_index = Papercraft.html {
       html5 {
         head {
           title 'BarBar'
@@ -101,7 +101,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/articles/a')
     @jamstack.route_and_call(req)
 
-    a = H {
+    a = Papercraft.html {
       html5 {
         head {
           title 'AAA'
@@ -138,7 +138,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/app/foo')
     @jamstack.route_and_call(req)
 
-    foo = H {
+    foo = Papercraft.html {
       html5 {
         head {
           title 'Foo title'
@@ -153,7 +153,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/app/index')
     @jamstack.route_and_call(req)
 
-    index = H {
+    index = Papercraft.html {
       html5 {
         head {
           title 'Hello'
@@ -176,7 +176,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/app/baz')
     @jamstack.route_and_call(req)
 
-    baz_index = H {
+    baz_index = Papercraft.html {
       html5 {
         head {
           title 'BarBar'
@@ -191,7 +191,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/app/articles/a')
     @jamstack.route_and_call(req)
 
-    a = H {
+    a = Papercraft.html {
       html5 {
         head {
           title 'AAA'
@@ -213,7 +213,7 @@ class JamstackTest < MiniTest::Test
     assert_equal [
       { kind: :file, path: File.join(JAMSTACK_PATH, 'bar.html'), ext: '.html', url: '/app/bar' },
       { kind: :file, path: File.join(JAMSTACK_PATH, 'index.md'), ext: '.md', url: '/app', 
-        title: 'Hello', foo: 'BarBar', markdown_content: '<h1>Index</h1>' },
+        title: 'Hello', foo: 'BarBar', html_content: "<h1>Index</h1>\n" },
     ], list
 
 
@@ -227,7 +227,7 @@ class JamstackTest < MiniTest::Test
         ext: '.md',
         title: 'MMM',
         layout: 'article',
-        markdown_content: "## BBB\n",
+        html_content: "<h2 id=\"bbb\">BBB</h2>\n",
         date: Date.new(2008, 06, 14)
       },
       {
@@ -237,7 +237,7 @@ class JamstackTest < MiniTest::Test
         ext: '.md',
         title: 'NNN',
         layout: 'article',
-        markdown_content: "## CCC\n",
+        html_content: "<h2 id=\"ccc\">CCC</h2>\n",
         date: Date.new(2009, 06, 12)
       },
       { 
@@ -247,7 +247,7 @@ class JamstackTest < MiniTest::Test
         ext: '.md',
         title: 'AAA',
         layout: 'article',
-        markdown_content: "## ZZZ\n"
+        html_content: "<h2 id=\"zzz\">ZZZ</h2>\n",
       },
     ], list
   end
@@ -256,7 +256,7 @@ class JamstackTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/foobar?q=42')
     @jamstack.route_and_call(req)
   
-    foo = H {
+    foo = Papercraft.html {
       html5 {
         head {
           title 'Foobar'
@@ -284,7 +284,7 @@ class JamstackTest < MiniTest::Test
       url:  '/',
       title: 'Hello',
       foo: 'BarBar',
-      markdown_content: '<h1>Index</h1>'
+      html_content: "<h1>Index</h1>\n"
     },  path_info('/index'))
 
     assert_equal({
@@ -294,7 +294,7 @@ class JamstackTest < MiniTest::Test
       url:  '/',
       title: 'Hello',
       foo: 'BarBar',
-      markdown_content: '<h1>Index</h1>'
+      html_content: "<h1>Index</h1>\n"
     },  path_info('/'))
 
     assert_equal({

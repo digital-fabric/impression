@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require 'yaml'
 require 'date'
+require 'yaml'
 require 'modulation'
 require 'papercraft'
 
@@ -36,10 +36,13 @@ module Impression
     private
 
     DATE_REGEXP = /(\d{4}\-\d{2}\-\d{2})/.freeze
-    MARKDOWN_PAGE_REGEXP = /\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)/m.freeze
+    FRONT_MATTER_REGEXP = /\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)/m.freeze
     MD_EXT_REGEXP = /\.md$/.freeze
     PAGE_EXT_REGEXP = /^(.+)\.(md|html|rb)$/.freeze
     INDEX_PAGE_REGEXP = /^(.+)?\/index$/.freeze
+    YAML_OPTS = {
+      permitted_classes: [Date]
+    }.freeze
 
     # Returns the path info for the given file path.
     #
@@ -51,7 +54,7 @@ module Impression
       when '.md'
         atts, content = parse_markdown_file(path)
         info = info.merge(atts)
-        info[:markdown_content] = content
+        info[:html_content] = Papercraft.markdown(content)
       when '.rb'
         info[:module] = import(path)
       end
@@ -99,8 +102,9 @@ module Impression
     # @param path_info [Hash] path info
     # @return [void]
     def render_papercraft_module(req, path_info)
-      html = H(path_info[:module]).render(request: req, resource: self)
-      req.respond(html, 'Content-Type' => Qeweney::MimeTypes[:html])
+      template = Papercraft.html(path_info[:module])
+      body = template.render(request: req, resource: self)
+      req.respond(body, 'Content-Type' => template.mime_type)
     end
 
     # Renders a markdown file using a layout.
@@ -112,7 +116,7 @@ module Impression
       layout = get_layout(path_info[:layout])
 
       html = layout.render(request: req, resource: self, **path_info) {
-        emit_markdown path_info[:markdown_content]
+        emit path_info[:html_content]
       }
       req.respond(html, 'Content-Type' => Qeweney::MimeTypes[:html])
     end
@@ -135,7 +139,7 @@ module Impression
     # @param path [String] file path
     # @return [Array] an tuple containing properties<Hash>, contents<String>
     def parse_markdown_file(path)
-      data = IO.read(path) || ''
+      content = IO.read(path) || ''
       atts = {}
 
       # Parse date from file name
@@ -143,16 +147,17 @@ module Impression
         atts[:date] ||= Date.parse(m[1])
       end
 
-      if (m = data.match(MARKDOWN_PAGE_REGEXP))
+      if (m = content.match(FRONT_MATTER_REGEXP))
         front_matter = m[1]
-        data = m.post_match
+        content = m.post_match
         
-        YAML.load(front_matter).each_with_object(atts) do |(k, v), h|
+        yaml = YAML.load(front_matter, **YAML_OPTS)
+        yaml.each_with_object(atts) do |(k, v), h|
           h[k.to_sym] = v
         end
       end
         
-      [atts, data]
+      [atts, content]
     end
 
     # Returns the supported path extensions used for searching for files based

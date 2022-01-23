@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency      'qeweney',              '~>0.16'
   
   # s.add_runtime_dependency      'rb-inotify',           '~>0.10.1'
-  s.add_runtime_dependency      'papercraft',            '~>0.15'
+  s.add_runtime_dependency      'papercraft',            '~>0.17'
   s.add_runtime_dependency      'modulation',           '~>1.1'
 
   

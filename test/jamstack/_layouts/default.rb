@@ -1,6 +1,6 @@
 require 'papercraft'
 
-export_default H { |**props|
+export_default Papercraft.html { |**props|
   html5 {
     head {
       title props[:title]

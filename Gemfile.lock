@@ -3,7 +3,7 @@ PATH
   specs:
     impression (0.6)
       modulation (~> 1.1)
-      papercraft (~> 0.15)
+      papercraft (~> 0.17)
       polyphony (~> 0.73.1)
       qeweney (~> 0.16)
       tipi (~> 0.45)
@@ -52,7 +52,7 @@ GEM
     modulation (1.1)
     msgpack (1.4.4)
     multipart-post (2.1.1)
-    papercraft (0.15)
+    papercraft (0.17)
       escape_utils (~> 1.2.1)
       kramdown (~> 2.3.1)
       kramdown-parser-gfm (~> 1.1.0)
