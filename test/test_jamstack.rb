@@ -227,6 +227,11 @@ class JamstackTest < MiniTest::Test
         ext: '.md',
         title: 'MMM',
         layout: 'article',
+        foo: {
+          bar: {
+            baz: 42
+          }
+        },
         html_content: "<h2 id=\"bbb\">BBB</h2>\n",
         date: Date.new(2008, 06, 14)
       },

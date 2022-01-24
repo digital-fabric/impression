@@ -41,8 +41,10 @@ module Impression
     PAGE_EXT_REGEXP = /^(.+)\.(md|html|rb)$/.freeze
     INDEX_PAGE_REGEXP = /^(.+)?\/index$/.freeze
 
-    PSYCH_VERSION = Psych::VERSION.match(/^(\d)/)[1].to_i
-    YAML_OPTS = (PSYCH_VERSION >= 4 ? { permitted_classes: [Date] } : {}).freeze
+    YAML_OPTS = {
+      permitted_classes: [Date],
+      symbolize_names: true
+    }.freeze
 
     # Returns the path info for the given file path.
     #
@@ -151,10 +153,8 @@ module Impression
         front_matter = m[1]
         content = m.post_match
         
-        yaml = YAML.load(front_matter, **YAML_OPTS)
-        yaml.each_with_object(atts) do |(k, v), h|
-          h[k.to_sym] = v
-        end
+        yaml = YAML.safe_load(front_matter, **YAML_OPTS)
+        atts = atts.merge(yaml)
       end
         
       [atts, content]
