@@ -1,3 +1,7 @@
+# 0.7.1 2022-01-24
+
+- Improve YAML front matter loading
+
 # 0.7 2022-01-23
 
 - Update Papercraft, Refactor Jamstack resource

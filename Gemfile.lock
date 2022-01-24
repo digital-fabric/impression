@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    impression (0.7)
+    impression (0.7.1)
       modulation (~> 1.1)
       papercraft (~> 0.17)
       polyphony (~> 0.73.1)
