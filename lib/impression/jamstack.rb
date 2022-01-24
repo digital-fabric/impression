@@ -40,9 +40,9 @@ module Impression
     MD_EXT_REGEXP = /\.md$/.freeze
     PAGE_EXT_REGEXP = /^(.+)\.(md|html|rb)$/.freeze
     INDEX_PAGE_REGEXP = /^(.+)?\/index$/.freeze
-    YAML_OPTS = {
-      permitted_classes: [Date]
-    }.freeze
+
+    PSYCH_VERSION = Psych::VERSION.match(/^(\d)/)[1].to_i
+    YAML_OPTS = (PSYCH_VERSION >= 4 ? { permitted_classes: [Date] } : {}).freeze
 
     # Returns the path info for the given file path.
     #
