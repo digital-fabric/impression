@@ -120,7 +120,7 @@ module Impression
       html = layout.render(request: req, resource: self, **path_info) {
         emit path_info[:html_content]
       }
-      req.respond(html, 'Content-Type' => template.mime_type)
+      req.respond(html, 'Content-Type' => layout.mime_type)
     end
 
     # Returns a layout component based on the given name. The given name
