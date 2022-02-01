@@ -1,3 +1,7 @@
+## 0.8 2022-02-01
+
+- Update dependencies
+
 # 0.7.1 2022-01-24
 
 - Improve YAML front matter loading
