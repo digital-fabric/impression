@@ -1,12 +1,12 @@
 PATH
   remote: .
   specs:
-    impression (0.7.1)
+    impression (0.8)
       modulation (~> 1.1)
       papercraft (~> 0.17)
       polyphony (~> 0.74)
       qeweney (~> 0.16)
-      tipi (~> 0.46)
+      tipi (~> 0.47)
 
 GEM
   remote: https://rubygems.org/
@@ -40,7 +40,7 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.3)
-    h1p (0.2)
+    h1p (0.3)
     http-2 (0.11.0)
     json (2.6.1)
     kramdown (2.3.1)
@@ -70,11 +70,11 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    tipi (0.46)
+    tipi (0.47)
       acme-client (~> 2.0.8)
       ever (~> 0.1)
       extralite (~> 1.2)
-      h1p (~> 0.2)
+      h1p (~> 0.3)
       http-2 (~> 0.11)
       localhost (~> 1.1.4)
       msgpack (~> 1.4.2)
