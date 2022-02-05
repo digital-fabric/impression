@@ -127,7 +127,7 @@ module Impression
     # defaults to 'default' if nil.
     #
     # @param layout [String, nil] layout name
-    # @return [Papercraft::Component] layout component
+    # @return [Papercraft::Template] layout component
     def get_layout(layout)
       layout ||= 'default'
       path = File.join(@directory, "_layouts/#{layout}.rb")

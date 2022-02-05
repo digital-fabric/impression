@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency      'tipi',                 '~>0.47'
   s.add_runtime_dependency      'qeweney',              '~>0.16'
   
-  s.add_runtime_dependency      'papercraft',           '~>0.17'
+  s.add_runtime_dependency      'papercraft',           '~>0.19'
   s.add_runtime_dependency      'modulation',           '~>1.1'
 
   
