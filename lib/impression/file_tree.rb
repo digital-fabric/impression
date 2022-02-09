@@ -8,6 +8,8 @@ module Impression
   # `FileTree` implements a resource that maps to a static file hierarchy.
   class FileTree < Resource
 
+    attr_reader :directory
+
     # Initializes a `FileTree` resource.
     #
     # @param directory [String] static directory path
