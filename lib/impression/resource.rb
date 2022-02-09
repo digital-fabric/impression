@@ -26,18 +26,24 @@ module Impression
     # A hash mapping relative paths to child resources
     attr_reader :children
 
-    # Initalizes a new resource instance.
+    # Initalizes a new resource instance. If a block is given, it is used as the
+    # request handler instead of the default one, which returns `404 NOT FOUND`.
     #
     # @param parent [Impression::Resource, nil] the parent resource (or nil)
     # @param path [String] the resource's relative path
+    # @param &block [Proc] default request handler
     # @return [void]
-    def initialize(parent: nil, path:)
+    def initialize(parent: nil, path:, &block)
       @parent = parent
       @path = normalize_route_path(path)
       @route_regexp = @path == '/' ? nil : /^#{@path}(\/.*)?$/.freeze
       @children = {}
 
       @parent&.add_child(self)
+
+      if block
+        singleton_class.define_method(:call, &block)
+      end
     end
 
     # Returns the resource's absolute path, according to its location in the

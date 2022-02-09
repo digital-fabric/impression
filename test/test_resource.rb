@@ -198,4 +198,15 @@ class ResourceTest < MiniTest::Test
     assert_equal '{"baz":123}', req.response_body
     assert_equal 'application/json', req.response_content_type
   end
+
+  def test_resource_with_block
+    r1 = Impression::Resource.new(path: '/') do |req|
+      req.respond('foobar', ':status' => Qeweney::Status::TEAPOT)
+    end
+
+    req = mock_req(':method' => 'GET', ':path' => '/')
+    r1.route_and_call(req)
+    assert_equal 'foobar', req.response_body
+    assert_equal Qeweney::Status::TEAPOT, req.response_status
+  end
 end
