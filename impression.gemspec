@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.6'
 
   s.add_runtime_dependency      'polyphony',            '~>0.77'
-  s.add_runtime_dependency      'tipi',                 '~>0.49'
+  s.add_runtime_dependency      'tipi',                 '~>0.50'
   s.add_runtime_dependency      'qeweney',              '~>0.17'
   
   s.add_runtime_dependency      'papercraft',           '~>0.19'
