@@ -1,3 +1,7 @@
+## 0.11 2022-02-10
+
+- Update Tipi
+
 ## 0.10 2022-02-10
 
 - Add support for resource modules in Jamstack (#13)
