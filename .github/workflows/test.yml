@@ -21,13 +21,10 @@ jobs:
     steps:
     - name: Setup machine
       uses: actions/checkout@v1
-    - name: Setup Ruby
-      uses: actions/setup-ruby@v1
+    - name: Setup Ruby and install deps
+      uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{matrix.ruby}}
-    - name: Install dependencies
-      run: |
-        # gem install bundler
-        bundle install        
+        bundler-cache: false
     - name: Run tests
       run:  bundle exec rake test
