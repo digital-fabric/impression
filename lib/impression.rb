@@ -28,15 +28,15 @@ module Impression
   #
   # @param **props [Hash] properties
   # @return [Impression::FileTree] new resource
-  def self.file_tree(**props)
-    FileTree.new(**props)
+  def self.file_tree(path: '/', **props)
+    FileTree.new(path: path, **props)
   end
 
   # Creates a new `Impression::Jamstack` instance with the given parameters.
   #
   # @param **props [Hash] properties
   # @return [Impression::Jamstack] new resource
-  def self.jamstack(**props)
-    Jamstack.new(**props)
+  def self.jamstack(path: '/', **props)
+    Jamstack.new(path: path, **props)
   end
 end

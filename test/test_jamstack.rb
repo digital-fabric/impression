@@ -212,7 +212,7 @@ class JamstackTest < MiniTest::Test
     list = @jamstack.page_list('/')
     assert_equal [
       { kind: :file, path: File.join(JAMSTACK_PATH, 'bar.html'), ext: '.html', url: '/app/bar' },
-      { kind: :file, path: File.join(JAMSTACK_PATH, 'index.md'), ext: '.md', url: '/app', 
+      { kind: :markdown, path: File.join(JAMSTACK_PATH, 'index.md'), ext: '.md', url: '/app', 
         title: 'Hello', foo: 'BarBar', html_content: "<h1>Index</h1>\n" },
     ], list
 
@@ -221,7 +221,7 @@ class JamstackTest < MiniTest::Test
 
     assert_equal [
       {
-        kind: :file,
+        kind: :markdown,
         path: File.join(JAMSTACK_PATH, 'articles/2008-06-14-manu.md'),
         url: '/app/articles/2008-06-14-manu',
         ext: '.md',
@@ -236,7 +236,7 @@ class JamstackTest < MiniTest::Test
         date: Date.new(2008, 06, 14)
       },
       {
-        kind: :file,
+        kind: :markdown,
         path: File.join(JAMSTACK_PATH, 'articles/2009-06-12-noatche.md'),
         url: '/app/articles/2009-06-12-noatche',
         ext: '.md',
@@ -246,7 +246,7 @@ class JamstackTest < MiniTest::Test
         date: Date.new(2009, 06, 12)
       },
       { 
-        kind: :file,
+        kind: :markdown,
         path: File.join(JAMSTACK_PATH, 'articles/a.md'),
         url: '/app/articles/a',
         ext: '.md',
@@ -283,7 +283,7 @@ class JamstackTest < MiniTest::Test
 
   def test_path_info
     assert_equal({
-      kind: :file,
+      kind: :markdown,
       path: File.join(JAMSTACK_PATH, 'index.md'),
       ext: '.md',
       url:  '/',
@@ -293,7 +293,7 @@ class JamstackTest < MiniTest::Test
     },  path_info('/index'))
 
     assert_equal({
-      kind: :file,
+      kind: :markdown,
       path: File.join(JAMSTACK_PATH, 'index.md'),
       ext: '.md',
       url:  '/',
@@ -312,5 +312,39 @@ class JamstackTest < MiniTest::Test
     assert_equal({
       kind: :not_found,
     },  path_info('/js/b.js'))
+  end
+
+  def test_resource_loading
+    req = mock_req(':method' => 'GET', ':path' => '/resources/greeter?name=world')
+    route = @jamstack.route(req)
+    assert_equal @jamstack, route
+
+    req = mock_req(':method' => 'GET', ':path' => '/resources/greeter?name=world')
+    @jamstack.route_and_call(req)
+    assert_response 'Hello, world!', :text, req
+
+    req = mock_req(':method' => 'GET', ':path' => '/resources/recurse/resources/greeter?name=foo')
+    @jamstack.route_and_call(req)
+    assert_response 'Hello, foo!', :text, req
+  end
+
+  def test_recursive_resource_loading_on_non_root_jamstack
+    jamstack = Impression::Jamstack.new(path: '/foo/bar', directory: JAMSTACK_PATH)
+
+    req = mock_req(':method' => 'GET', ':path' => '/foo/bar/resources/greeter?name=world')
+    route = jamstack.route(req)
+    assert_equal jamstack, route
+
+    req = mock_req(':method' => 'GET', ':path' => '/foo/bar/resources/greeter?name=world')
+    jamstack.route_and_call(req)
+    assert_response 'Hello, world!', :text, req
+
+    req = mock_req(':method' => 'GET', ':path' => '/foo/bar/resources/recurse/resources/greeter?name=foo')
+    jamstack.route_and_call(req)
+    assert_response 'Hello, foo!', :text, req
+
+    # req = mock_req(':method' => 'GET', ':path' => '/foo/bar/resources/recurse/bar')
+    # @jamstack.route_and_call(req)
+    # assert_response static('bar.html'), :html, req
   end
 end

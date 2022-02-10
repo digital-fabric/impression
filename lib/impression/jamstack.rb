@@ -57,8 +57,10 @@ module Impression
         atts, content = parse_markdown_file(path)
         info = info.merge(atts)
         info[:html_content] = Papercraft.markdown(content)
+        info[:kind] = :markdown
       when '.rb'
         info[:module] = import(path)
+        info[:kind] = :module
       end
       if (m = path.match(DATE_REGEXP))
         info[:date] ||= Date.parse(m[1])
@@ -82,29 +84,132 @@ module Impression
       relative_path == '/' ? absolute_path : File.join(absolute_path, relative_path)
     end
 
-    # Renders a file response for the given request and the given path info.
+    # Renders a response according to the given path info.
+    # 
+    # @param req [Qeweney::Request] request
+    # @param path_info [Hash] path info
+    # @return [void]
+    def render_from_path_info(req, path_info)
+      case (kind = path_info[:kind])
+      when :not_found
+        mod_path_info = up_tree_resource_module_path_info(req, path_info)
+        if mod_path_info
+          render_module(req, mod_path_info)
+        else
+          req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
+        end
+      when :module
+        render_module(req, path_info)
+      when :markdown
+        render_markdown_file(req, path_info)
+      when :file
+        render_file(req, path_info)
+      else
+        raise "Invalid path info kind #{kind.inspect}"
+      end
+    end
+
+    # Returns the path info for an up-tree resource module, or false if not
+    # found. the :up_tree_resource_module_path_info KV can be either:
+    # - nil (default): up tree module search has not been performed.
+    # - false: no up tree module was found.
+    # - module path info: up tree module info (subsequent requests will be
+    #   directly routed to the module).
+    #
+    # @param req [Qeweney::Request] request
+    # @param path_info [Hash] path info
+    # @return [Hash, false] up-tree resource module path info
+    def up_tree_resource_module_path_info(req, path_info)
+      if path_info[:up_tree_resource_module_path_info].nil?
+        if (mod_path_info = find_up_tree_resource_module(req, path_info))
+          path_info[:up_tree_resource_module_path_info] = mod_path_info
+          return mod_path_info;
+        else
+          path_info[:up_tree_resource_module_path_info] = false
+          return false
+        end
+      end
+      path_info[:up_tree_resource_module_path_info]
+    end
+
+    # Performs a recursive search for an up-tree resource module from the given
+    # path info. If a resource module is found up the tree, its path_info is
+    # returned, otherwise returns nil.
+    # 
+    # @param req [Qeweney::Request] request
+    # @param path_info [Hash] path info
+    # @return [Hash, nil] up-tree resource module path info
+    def find_up_tree_resource_module(req, path_info)
+      relative_path = req.resource_relative_path
+
+      while relative_path != path
+        up_tree_path = File.expand_path('..', relative_path)
+        up_tree_path_info = get_path_info(up_tree_path)
+
+        case up_tree_path_info[:kind]
+        when :not_found
+          relative_path = up_tree_path
+          next
+        when :module
+          return up_tree_path_info
+        else
+          return nil
+        end
+      end
+      nil
+    end
+
+    # Renders a file response for the given request and the given path info,
+    # according to the file type.
     #
     # @param req [Qeweney::Request] request
     # @param path_info [Hash] path info
     # @return [void]
-    def render_file(req, path_info)
-      case path_info[:ext]
-      when '.rb'
-        render_papercraft_module(req, path_info)
-      when '.md'
-        render_markdown_file(req, path_info)
+    # def render_file(req, path_info)
+    #   case path_info[:kind]
+    #   else
+    #     req.serve_file(path_info[:path])
+    #   end
+    # end
+
+    # Renders a module. If the module is a Resource, it is mounted, and then the
+    # request is rerouted from the new resource and rendered. If the module is a
+    # Proc or a Papercraft::Template, it is rendered as such. Otherwise, an
+    # error is raised.
+    #
+    # @param req [Qeweney::Request] request
+    # @param path_info [Hash] path info
+    # @return [void]
+    def render_module(req, path_info)
+      # p render_module: path_info
+      case (mod = path_info[:module])
+      when Module
+        resource = mod.resource
+        resource.remount(self, path_info[:url])
+        # p path_info_url: path_info[:url], relative_path: req.resource_relative_path
+        relative_url = path_info[:url].gsub(/^#{path}/, '')
+        # p relative_url: relative_url
+        req.recalc_resource_relative_path(relative_url)
+        # p resource_relative_path: req.resource_relative_path
+        resource.route(req).call(req)
+      when Impression::Resource
+        mod.remount(self, path_info[:url])
+        req.recalc_resource_relative_path(path_info[:url])
+        mod.route(req).call(req)
+      when Proc, Papercraft::Template
+        render_papercraft_module(req, mod)
       else
-        req.serve_file(path_info[:path])
+        raise "Unsupported module type #{mod.class}"
       end
     end
 
-    # Renders a Papercraft module. The module is loaded using Modulation.
+    # Renders a Papercraft module.
     #
-    # @param req [Qeweney::Request] reqest
+    # @param mod [Module] Papercraft module
     # @param path_info [Hash] path info
     # @return [void]
-    def render_papercraft_module(req, path_info)
-      template = Papercraft.html(path_info[:module])
+    def render_papercraft_module(req, mod)
+      template = Papercraft.html(mod)
       body = template.render(request: req, resource: self)
       req.respond(body, 'Content-Type' => template.mime_type)
     end

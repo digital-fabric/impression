@@ -46,6 +46,17 @@ module Impression
       end
     end
 
+    # Remounts the resource on a different parent and path.
+    #
+    # @param parent [Resource, nil] new parent
+    # @param path [String] new path relative to new parent
+    # @return [void]
+    def remount(parent, path)
+      @parent&.remove_child(self)
+      @parent = parent
+      @path = normalize_route_path(path)
+    end
+
     # Returns the resource's absolute path, according to its location in the
     # resource hierarchy.
     #
@@ -70,6 +81,15 @@ module Impression
     # @return [Impression::Resource] self
     def add_child(child)
       @children[child.path] = child
+      self
+    end
+
+    # Removes a child reference from the children map.
+    #
+    # @param child [Impression::Resource] child resource
+    # @return [Impression::Resource] self
+    def remove_child(child)
+      @children.delete(child.path)
       self
     end
 

@@ -29,11 +29,11 @@ module Impression
       render_from_path_info(req, path_info)
     end
 
-    # Renders a response from the given response kind and path.
+    # Renders a response from the given path info.
     #
     # @param req [Qeweney::Request] request
-    # @param kind [Symbol] path kind (`:not_found` or `:file`)
-    # @param path [String, nil] file path
+    # @param path_info [Hash] path info
+    # @return [void]
     def render_from_path_info(req, path_info)
       case path_info[:kind]
       when :not_found
@@ -41,7 +41,7 @@ module Impression
       when :file
         render_file(req, path_info)
       else
-        raise "Invalid path info kind #{kind.inspect}"
+        raise "Invalid path info kind #{path_info[:kind].inspect}"
       end
     end
 
@@ -75,7 +75,11 @@ module Impression
     def calculate_path_info(path)
       full_path = File.join(@directory, path)
 
-      path_info(full_path) || search_path_info_with_extension(full_path) || { kind: :not_found }
+      (
+        path_info(full_path) ||
+        search_path_info_with_extension(full_path) ||
+        { kind: :not_found }
+      )
     end
 
     # Returns the path info for the given path. If the path refers to a file,

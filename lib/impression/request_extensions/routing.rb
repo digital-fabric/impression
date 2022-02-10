@@ -31,7 +31,17 @@ module Impression
       #
       # @return [String]
       def resource_relative_path
-        @resource_relative_path ||= path.dup
+        @resource_relative_path ||= path
+      end
+
+      # Recalculates the relative_path from the given base path
+      #
+      # @param base_path [String] base path
+      # @return [String] new relative path
+      def recalc_resource_relative_path(base_path)
+        @resource_relative_path = @resource_relative_path.gsub(
+          /^#{base_path}/, ''
+        )
       end
 
       private

@@ -41,6 +41,10 @@ module Minitest::Assertions
   end
 
   def assert_response exp_body, exp_content_type, req
+    status = req.response_status
+    msg = message(msg) { "Expected HTTP status 200 OK, but instead got #{status}" }
+    assert_equal 200, status, msg
+
     actual = req.response_body
     assert_equal exp_body.gsub("\n", ''), actual&.gsub("\n", '')
 
