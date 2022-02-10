@@ -1,3 +1,9 @@
+## 0.10 2022-02-10
+
+- Add support for resource modules in Jamstack (#13)
+- Add convenience methods for creating resources (#12)
+- Accept block for setting default request handler in Resource.new (#11)
+
 ## 0.9 2022-02-05
 
 - Update Papercraft
