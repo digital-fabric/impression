@@ -11,8 +11,8 @@ require_relative './file_tree'
 
 module Impression
 
-  # `Jamstack` implements a resource that maps to a Jamstack app directory.
-  class Jamstack < FileTree
+  # `App` implements a resource that maps to a generic app directory.
+  class App < FileTree
     def initialize(**props)
       super
       @layouts = {}
@@ -145,7 +145,6 @@ module Impression
       while relative_path != path
         up_tree_path = File.expand_path('..', relative_path)
         up_tree_path_info = get_path_info(up_tree_path)
-
         case up_tree_path_info[:kind]
         when :not_found
           relative_path = up_tree_path
