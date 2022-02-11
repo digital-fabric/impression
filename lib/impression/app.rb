@@ -144,6 +144,8 @@ module Impression
 
       while relative_path != path
         up_tree_path = File.expand_path('..', relative_path)
+        return nil if up_tree_path == relative_path
+
         up_tree_path_info = get_path_info(up_tree_path)
         case up_tree_path_info[:kind]
         when :not_found

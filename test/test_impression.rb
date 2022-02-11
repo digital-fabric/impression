@@ -22,10 +22,10 @@ class ImpressionModuleTest < MiniTest::Test
     assert_equal '/bar', r1.directory
   end
 
-  def test_jamstack_method
-    r1 = Impression.jamstack(path: '/foo', directory: '/bar')
+  def test_app_method
+    r1 = Impression.app(path: '/foo', directory: '/bar')
 
-    assert_kind_of Impression::Jamstack, r1
+    assert_kind_of Impression::App, r1
     assert_equal '/foo', r1.path
     assert_equal '/bar', r1.directory
   end

@@ -3,11 +3,8 @@
 require 'polyphony'
 
 require_relative './impression/request_extensions'
-# require_relative './impression/file_watcher'
-
 require_relative './impression/resource'
 require_relative './impression/file_tree'
-require_relative './impression/jamstack'
 require_relative './impression/app'
 
 # The Impression module contains convenience methods for creating resources.
@@ -32,11 +29,11 @@ module Impression
     FileTree.new(path: path, **props)
   end
 
-  # Creates a new `Impression::Jamstack` instance with the given parameters.
+  # Creates a new `Impression::App` instance with the given parameters.
   #
   # @param **props [Hash] properties
-  # @return [Impression::Jamstack] new resource
-  def self.jamstack(path: '/', **props)
-    Jamstack.new(path: path, **props)
+  # @return [Impression::App] new resource
+  def self.app(path: '/', **props)
+    App.new(path: path, **props)
   end
 end

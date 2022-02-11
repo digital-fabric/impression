@@ -14,7 +14,7 @@ module Impression
     #
     # @param directory [String] static directory path
     # @return [void]
-    def initialize(directory:, **props)
+    def initialize(directory: nil, **props)
       super(**props)
       @directory = directory
       @path_info_cache = {}
@@ -25,6 +25,8 @@ module Impression
     # @param req [Qeweney::Request] request
     # @return [void]
     def call(req)
+      return super if @directory.nil?
+
       path_info = get_path_info(req.resource_relative_path)
       render_from_path_info(req, path_info)
     end

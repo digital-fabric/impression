@@ -3,7 +3,7 @@
 export :resource
 
 def resource
-  Impression.jamstack(
+  Impression.app(
     directory: File.expand_path('..', __dir__)
   )
 end
