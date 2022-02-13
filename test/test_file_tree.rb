@@ -151,4 +151,22 @@ class FileTreeTest < MiniTest::Test
       kind: :not_found,
     },  path_info('/js/b.js'))
   end
+
+  def test_file_tree_with_default_handler_block
+    @file_tree = Impression::FileTree.new(path: '/', directory: STATIC_PATH)
+
+    req = mock_req(':method' => 'GET', ':path' => '/foobar')
+    @file_tree.route_and_call(req)
+    assert_equal Qeweney::Status::NOT_FOUND, req.response_status
+
+    @file_tree = Impression::FileTree.new(path: '/', directory: STATIC_PATH) { |req|
+      req.respond('foobar', 'Foo' => 'bar')
+    }
+
+    req = mock_req(':method' => 'GET', ':path' => '/foobar')
+    @file_tree.route_and_call(req)
+    assert_equal Qeweney::Status::OK, req.response_status
+    assert_equal 'foobar', req.response_body
+    assert_equal 'bar', req.response_headers['Foo']
+  end
 end

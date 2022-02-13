@@ -14,8 +14,8 @@ module Impression
     #
     # @param directory [String] static directory path
     # @return [void]
-    def initialize(directory: nil, **props)
-      super(**props)
+    def initialize(directory: nil, **props, &block)
+      super(**props, &block)
       @directory = directory
       @path_info_cache = {}
     end
