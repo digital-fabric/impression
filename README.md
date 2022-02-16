@@ -57,7 +57,7 @@ Impression provides the following resources:
 - `FileTree` - a resource serving static files from the given directory.
 - `App` - a resource serving static files, markdown files with layouts and Ruby
   modules from the given directory.
-- `RackApp` - a resource serving the given Rack app (WIP).
+- `RackApp` - a resource serving the given Rack app.
 
 ## Setting up a basic resource
 
@@ -103,9 +103,6 @@ app = Impression.app { |req| req.respond('Homepage') }
 greeter = Impression.resource(parent: app, path: 'greeter')
 static = Impression.file_tree(parent: app, path: 'static', directory: __dir__)
 ```
-
-
-File tree resources 
 
 ## I want to know more
 

@@ -5,7 +5,7 @@ PATH
       modulation (~> 1.1)
       papercraft (~> 0.23)
       polyphony (~> 0.77)
-      qeweney (~> 0.17)
+      qeweney (~> 0.18)
       tipi (~> 0.50)
 
 GEM
@@ -58,7 +58,7 @@ GEM
       kramdown-parser-gfm (~> 1.1.0)
       rouge (~> 3.27.0)
     polyphony (0.77)
-    qeweney (0.17)
+    qeweney (0.18)
       escape_utils (~> 1.2.1)
     rack (2.2.3)
     rake (12.3.3)
