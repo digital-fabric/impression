@@ -1,3 +1,7 @@
+## 0.12 2022-02-16
+
+- Implement `RackApp` resource class (#16)
+
 ## 0.11 2022-02-10
 
 - Update Tipi
