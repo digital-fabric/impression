@@ -1,3 +1,7 @@
+## 0.13 2022-04-05
+
+- Prevent race condiution on loading Ruby modules
+
 ## 0.12 2022-02-16
 
 - Implement `RackApp` resource class (#16)
