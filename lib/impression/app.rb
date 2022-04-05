@@ -16,6 +16,7 @@ module Impression
     def initialize(**props)
       super
       @layouts = {}
+      @file_info_loader = spin { run_file_info_loader }
     end
 
     # Returns a list of pages found in the given directory (relative to the base
@@ -46,6 +47,65 @@ module Impression
       symbolize_names: true
     }.freeze
 
+    # Runs a file info loader handling incoming requests for file info. This
+    # method is run in a fiber setup in #initialize.
+    #
+    # @return [void]
+    def run_file_info_loader
+      loop do
+        peer, path = receive
+        begin
+          info = calculate_path_info(path)
+          peer << info
+        rescue Polyphony::BaseException
+          raise
+        rescue => e
+          peer.raise(e)
+        end
+      end
+    end
+
+    def safe_calculate_path_info(path)
+      @file_info_loader << [Fiber.current, path]
+      receive
+    end
+
+    # Returns the path info for the given relative path.
+    #
+    # @param path [String] relative path
+    # @return [Hash] path info
+    def get_path_info(path)
+      @path_info_cache[path] ||= safe_calculate_path_info(path)
+    end
+
+    # Returns complete file info for Markdown files
+    #
+    # @param info [Hash] file info
+    # @param path [String] file path
+    # @return [Hash] file info
+    def file_info_md(info, path)
+      atts, content = parse_markdown_file(path)
+      info = info.merge(atts)
+      info[:html_content] = Papercraft.markdown(content)
+      info[:kind] = :markdown
+      if !info[:date] && (m = path.match(DATE_REGEXP))
+        info[:date] = Date.parse(m[1])
+      end
+      info
+    end
+
+    # Returns complete file info for Ruby files
+    #
+    # @param info [Hash] file info
+    # @param path [String] file path
+    # @return [Hash] file info
+    def file_info_rb(info, path)
+      info.merge(
+        kind: :module,
+        module: import(path)
+      )
+    end
+
     # Returns the path info for the given file path.
     #
     # @param path [String] file path
@@ -54,19 +114,12 @@ module Impression
       info = super
       case info[:ext]
       when '.md'
-        atts, content = parse_markdown_file(path)
-        info = info.merge(atts)
-        info[:html_content] = Papercraft.markdown(content)
-        info[:kind] = :markdown
+        file_info_md(info, path)
       when '.rb'
-        info[:module] = import(path)
-        info[:kind] = :module
+        file_info_rb(info, path)
+      else
+        info
       end
-      if (m = path.match(DATE_REGEXP))
-        info[:date] ||= Date.parse(m[1])
-      end
-  
-      info
     end
 
     # Returns the pretty URL for the given relative path. For pages, the
