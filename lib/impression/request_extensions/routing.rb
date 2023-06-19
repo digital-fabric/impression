@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Impression
-  
+
   # Extensions for `Qeweney::Request`
   module RequestExtensions
 

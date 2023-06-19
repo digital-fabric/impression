@@ -8,7 +8,7 @@ require_relative './request_extensions/responses'
 
 # Extensions to `Qeweney::Request`
 class Qeweney::Request
-  
+
   # include Impression::Pages::RequestMethods
   include Impression::RequestExtensions::Routing
   include Impression::RequestExtensions::Responses

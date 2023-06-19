@@ -55,7 +55,7 @@ class ResourceTest < MiniTest::Test
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar/littlebar')
     assert_equal r4, r1.route(req)
     assert_equal '/', req.resource_relative_path
-  
+
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar/littlebar/littlebaz')
     assert_equal r4, r1.route(req)
     assert_equal '/littlebaz', req.resource_relative_path

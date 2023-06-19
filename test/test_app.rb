@@ -260,7 +260,7 @@ class AppTest < MiniTest::Test
   def test_template_resource_and_request
     req = mock_req(':method' => 'GET', ':path' => '/foobar?q=42')
     @app.route_and_call(req)
-  
+
     foo = Papercraft.html {
       html5 {
         head {
@@ -360,14 +360,14 @@ class AbstractAppTest < MiniTest::Test
 
   def test_abstract_app_each
     app = Impression::App.new(path: '/')
-    
+
     buffer = []
     app.each { |r| buffer << r }
     assert_equal [app], buffer
 
     foo = PathRenderingResource.new(parent: app, path: 'foo')
     bar = PathRenderingResource.new(parent: app, path: 'bar')
-    
+
     buffer = []
     app.each { |r| buffer << r }
     assert_equal [app, foo, bar], buffer

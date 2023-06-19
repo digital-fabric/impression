@@ -3,7 +3,7 @@
 require 'json'
 
 module Impression
-  
+
   module RequestExtensions
 
     # Response extensions for `Qeweney::Request`

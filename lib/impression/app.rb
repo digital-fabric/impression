@@ -291,10 +291,10 @@ module Impression
       layout ||= 'default'
       path = File.join(@directory, "_layouts/#{layout}.rb")
       raise "Layout not found #{path}" unless File.file?(path)
-      
+
       import path
     end
-  
+
     # Parses the markdown file at the given path.
     #
     # @param path [String] file path
@@ -311,11 +311,11 @@ module Impression
       if (m = content.match(FRONT_MATTER_REGEXP))
         front_matter = m[1]
         content = m.post_match
-        
+
         yaml = YAML.safe_load(front_matter, **YAML_OPTS)
         atts = atts.merge(yaml)
       end
-        
+
       [atts, content]
     end
 
