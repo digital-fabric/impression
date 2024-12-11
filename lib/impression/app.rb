@@ -16,7 +16,7 @@ module Impression
     def initialize(**props)
       super
       @layouts = {}
-      @file_info_loader = spin { run_file_info_loader }
+      # @file_info_loader = spin { run_file_info_loader }
     end
 
     # Returns a list of pages found in the given directory (relative to the base
@@ -66,8 +66,9 @@ module Impression
     end
 
     def safe_calculate_path_info(path)
-      @file_info_loader << [Fiber.current, path]
-      receive
+      # @file_info_loader << [Fiber.current, path]
+      # receive
+      calculate_path_info(path)
     end
 
     # Returns the path info for the given relative path.

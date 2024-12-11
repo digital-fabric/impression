@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'polyphony'
+# require 'polyphony'
 
 require_relative './impression/request_extensions'
 require_relative './impression/resource'
