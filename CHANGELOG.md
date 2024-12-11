@@ -1,3 +1,7 @@
+## 0.14 2024-12-11
+
+- Remove Polyphony, Tipi deps
+
 ## 0.13 2022-04-05
 
 - Prevent race condiution on loading Ruby modules
