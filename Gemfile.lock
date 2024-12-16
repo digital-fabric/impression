@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    impression (0.14)
+    impression (0.15)
       papercraft (~> 0.23)
       qeweney (~> 0.18)
 
@@ -25,7 +25,7 @@ GEM
     qeweney (0.18)
       escape_utils (~> 1.2.1)
     rake (12.3.3)
-    rexml (3.3.9)
+    rexml (3.4.0)
     rouge (3.27.0)
     simplecov (0.17.1)
       docile (~> 1.1)
