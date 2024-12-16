@@ -3,7 +3,6 @@
 require 'fileutils'
 require 'date'
 require 'yaml'
-require 'modulation'
 require 'papercraft'
 
 require_relative './resource'

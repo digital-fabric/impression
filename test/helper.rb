@@ -5,6 +5,7 @@ require_relative './coverage' if ENV['COVERAGE']
 require 'minitest/autorun'
 require 'impression'
 require 'qeweney/test_adapter'
+require 'modulation'
 
 module Kernel
   def mock_req(**args)
@@ -95,4 +96,4 @@ class Qeweney::Request
   end
 end
 
-puts "Polyphony backend: #{Thread.current.backend.kind}"
+# puts "Polyphony backend: #{Thread.current.backend.kind}"

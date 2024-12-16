@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     impression (0.14)
-      modulation (~> 1.1)
       papercraft (~> 0.23)
       qeweney (~> 0.18)
 
@@ -40,6 +39,7 @@ PLATFORMS
 DEPENDENCIES
   impression!
   minitest (~> 5.11.3)
+  modulation (~> 1.1)
   rake (~> 12.3.3)
   simplecov (~> 0.17.1)
 
