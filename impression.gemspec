@@ -22,8 +22,8 @@ Gem::Specification.new do |s|
 
   # s.add_runtime_dependency      'polyphony',            '~>0.93'
   # s.add_runtime_dependency      'tipi',                 '~>0.52'
-  s.add_runtime_dependency      'qeweney',              '~>0.18'
-  s.add_runtime_dependency      'papercraft',           '~>0.23'
+  s.add_runtime_dependency      'qeweney',              '~>0.20'
+  s.add_runtime_dependency      'papercraft',           '~>1.3'
   
   s.add_development_dependency  'modulation',           '~>1.1'
   s.add_development_dependency  'rake',                 '~>12.3.3'

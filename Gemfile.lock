@@ -1,40 +1,45 @@
 PATH
   remote: .
   specs:
-    impression (0.15)
-      papercraft (~> 0.23)
-      qeweney (~> 0.18)
+    impression (0.16)
+      papercraft (~> 1.3)
+      qeweney (~> 0.20)
 
 GEM
   remote: https://rubygems.org/
   specs:
     docile (1.4.1)
-    escape_utils (1.2.2)
-    json (2.8.2)
-    kramdown (2.3.2)
-      rexml
+    escape_utils (1.3.0)
+    json (2.9.0)
+    kramdown (2.5.1)
+      rexml (>= 3.3.9)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
     minitest (5.11.3)
     modulation (1.2)
-    papercraft (0.29)
-      escape_utils (~> 1.2.1)
-      kramdown (~> 2.3.1)
+    papercraft (1.3)
+      escape_utils (~> 1.3.0)
+      kramdown (~> 2.5.1)
       kramdown-parser-gfm (~> 1.1.0)
-      rouge (~> 3.27.0)
-    qeweney (0.18)
-      escape_utils (~> 1.2.1)
+      rouge (~> 4.5.1)
+      sirop (~> 0.4)
+    prism (0.27.0)
+    qeweney (0.20)
+      escape_utils (~> 1.3.0)
     rake (12.3.3)
     rexml (3.4.0)
-    rouge (3.27.0)
+    rouge (4.5.1)
     simplecov (0.17.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    sirop (0.4)
+      prism (~> 0.27.0)
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   impression!
@@ -44,4 +49,4 @@ DEPENDENCIES
   simplecov (~> 0.17.1)
 
 BUNDLED WITH
-   2.3.3
+   2.5.22
