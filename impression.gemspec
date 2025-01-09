@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--title", "impression", "--main", "README.md"]
   s.extra_rdoc_files = ["README.md"]
   s.require_paths = ["lib"]
-  s.required_ruby_version = '>= 2.6'
+  s.required_ruby_version = '>= 3.2'
 
   s.add_runtime_dependency      'qeweney',    '~>0.21'
   s.add_runtime_dependency      'papercraft', '~>1.4'
