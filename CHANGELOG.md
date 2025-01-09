@@ -1,3 +1,7 @@
+## 0.17 2025-01-09
+
+- Update deps, cleanup tests
+
 ## 0.14 2024-12-11
 
 - Remove Polyphony, Tipi deps

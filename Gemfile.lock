@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    impression (0.16)
+    impression (0.17)
       papercraft (~> 1.4)
       qeweney (~> 0.21)
 
