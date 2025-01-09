@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class RackAppTest < MiniTest::Test
+class RackAppTest < Minitest::Test
   def test_basic_rack_app
     app = Impression.rack_app(path: '/etc/rack') { |env|
       [

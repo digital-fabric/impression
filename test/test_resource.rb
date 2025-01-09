@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class ResourceTest < MiniTest::Test
+class ResourceTest < Minitest::Test
   def test_absolute_path
     r1 = Impression::Resource.new(path: 'foo')
     assert_equal '/foo', r1.absolute_path

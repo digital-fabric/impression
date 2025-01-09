@@ -4,12 +4,12 @@ require 'bundler/setup'
 require_relative './coverage' if ENV['COVERAGE']
 require 'minitest/autorun'
 require 'impression'
-require 'qeweney/test_adapter'
+require 'qeweney/mock_adapter'
 require 'modulation'
 
 module Kernel
   def mock_req(**args)
-    Qeweney::TestAdapter.mock(**args)
+    Qeweney::MockAdapter.mock(**args)
   end
 
   def capture_exception

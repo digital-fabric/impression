@@ -20,13 +20,11 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   s.required_ruby_version = '>= 2.6'
 
-  # s.add_runtime_dependency      'polyphony',            '~>0.93'
-  # s.add_runtime_dependency      'tipi',                 '~>0.52'
-  s.add_runtime_dependency      'qeweney',              '~>0.20'
-  s.add_runtime_dependency      'papercraft',           '~>1.3'
-  
-  s.add_development_dependency  'modulation',           '~>1.1'
-  s.add_development_dependency  'rake',                 '~>12.3.3'
-  s.add_development_dependency  'minitest',             '~>5.11.3'
-  s.add_development_dependency  'simplecov',            '~>0.17.1'
+  s.add_runtime_dependency      'qeweney',    '~>0.21'
+  s.add_runtime_dependency      'papercraft', '~>1.4'
+
+  s.add_development_dependency  'modulation', '~>1.2'
+  s.add_development_dependency  'rake',       '~>13.2.1'
+  s.add_development_dependency  'minitest',   '~>5.25.4'
+  s.add_development_dependency  'simplecov',  '~>0.22.0'
 end

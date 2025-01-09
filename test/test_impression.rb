@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class ImpressionModuleTest < MiniTest::Test
+class ImpressionModuleTest < Minitest::Test
   def test_resource_method
     r1 = Impression.resource do |req|
       req.respond('foobar', ':status' => Qeweney::Status::TEAPOT)

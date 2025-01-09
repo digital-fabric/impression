@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'helper'
-require 'qeweney/test_adapter'
 
-class FileTreeTest < MiniTest::Test
+class FileTreeTest < Minitest::Test
   STATIC_PATH = File.join(__dir__, 'static')
 
   def setup

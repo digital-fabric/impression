@@ -3,7 +3,7 @@
 require_relative 'helper'
 require 'fileutils'
 
-# class FileWatcherTest < MiniTest::Test
+# class FileWatcherTest < Minitest::Test
 #   def setup
 #     @tmp_path = File.expand_path('../tmp', __dir__)
 #     FileUtils.mkdir(@tmp_path)

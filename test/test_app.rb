@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'helper'
-require 'qeweney/test_adapter'
 
-class AppTest < MiniTest::Test
+class AppTest < Minitest::Test
   APP_PATH = File.join(__dir__, 'app')
 
   def setup
@@ -349,7 +348,7 @@ class AppTest < MiniTest::Test
   end
 end
 
-class AbstractAppTest < MiniTest::Test
+class AbstractAppTest < Minitest::Test
   def test_abstract_app_default_response
     app = Impression::App.new(path: '/')
     req = mock_req(':method' => 'GET', ':path' => '/')
