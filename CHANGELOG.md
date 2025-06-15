@@ -1,3 +1,7 @@
+## 0.18 2025-06-15
+
+- Fix behaviour of App resource for not found paths
+
 ## 0.17 2025-01-09
 
 - Update deps, cleanup tests
