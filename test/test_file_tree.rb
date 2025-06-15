@@ -165,7 +165,7 @@ class FileTreeTest < Minitest::Test
     req = mock_req(':method' => 'GET', ':path' => '/foobar')
     @file_tree.route_and_call(req)
     assert_equal Qeweney::Status::OK, req.response_status
-    assert_equal 'foobar', req.response_body
+    assert_equal 'foobar', req.adapter.body
     assert_equal 'bar', req.response_headers['Foo']
   end
 end

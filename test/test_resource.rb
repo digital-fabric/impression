@@ -84,11 +84,11 @@ class ResourceTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
     r1.route_and_call(req)
-    assert_equal '/foo/bar', req.response_body
+    assert_equal '/foo/bar', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
     r1.route_and_call(req)
-    assert_equal '/foo/baz', req.response_body
+    assert_equal '/foo/baz', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bbb')
     assert_equal r1, r1.route(req)
@@ -104,27 +104,27 @@ class ResourceTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/foo')
     r1.route_and_call(req)
-    assert_equal '/foo /', req.response_body
+    assert_equal '/foo /', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/zzz')
     r1.route_and_call(req)
-    assert_equal '/foo /zzz', req.response_body
+    assert_equal '/foo /zzz', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
     r1.route_and_call(req)
-    assert_equal '/foo/bar /', req.response_body
+    assert_equal '/foo/bar /', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar/zzz')
     r1.route_and_call(req)
-    assert_equal '/foo/bar /zzz', req.response_body
+    assert_equal '/foo/bar /zzz', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz')
     r1.route_and_call(req)
-    assert_equal '/foo/baz /', req.response_body
+    assert_equal '/foo/baz /', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/baz/xxx/yyy')
     r1.route_and_call(req)
-    assert_equal '/foo/baz /xxx/yyy', req.response_body
+    assert_equal '/foo/baz /xxx/yyy', req.adapter.body
   end
 
   class CallableResource < Impression::Resource
@@ -144,7 +144,7 @@ class ResourceTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
     r1.route_and_call(req)
-    assert_equal 'hi', req.response_body
+    assert_equal 'hi', req.adapter.body
   end
 
   class CallableRouteResource < Impression::Resource
@@ -164,7 +164,7 @@ class ResourceTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
     r1.route_and_call(req)
-    assert_equal 'bye', req.response_body
+    assert_equal 'bye', req.adapter.body
   end
 
   def test_text_response
@@ -185,17 +185,17 @@ class ResourceTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/text')
     r.route_and_call(req)
-    assert_equal 'foo', req.response_body
+    assert_equal 'foo', req.adapter.body
     assert_equal 'text/plain', req.response_content_type
 
     req = mock_req(':method' => 'GET', ':path' => '/html')
     r.route_and_call(req)
-    assert_equal 'bar', req.response_body
+    assert_equal 'bar', req.adapter.body
     assert_equal 'text/html', req.response_content_type
 
     req = mock_req(':method' => 'GET', ':path' => '/json')
     r.route_and_call(req)
-    assert_equal '{"baz":123}', req.response_body
+    assert_equal '{"baz":123}', req.adapter.body
     assert_equal 'application/json', req.response_content_type
   end
 
@@ -206,7 +206,7 @@ class ResourceTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/')
     r1.route_and_call(req)
-    assert_equal 'foobar', req.response_body
+    assert_equal 'foobar', req.adapter.body
     assert_equal Qeweney::Status::TEAPOT, req.response_status
   end
 end

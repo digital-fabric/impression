@@ -10,7 +10,7 @@ class ImpressionModuleTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/')
     r1.route_and_call(req)
-    assert_equal 'foobar', req.response_body
+    assert_equal 'foobar', req.adapter.body
     assert_equal Qeweney::Status::TEAPOT, req.response_status
   end
 

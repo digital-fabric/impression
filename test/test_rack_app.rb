@@ -19,7 +19,7 @@ class RackAppTest < Minitest::Test
     app.route_and_call(req)
     assert_equal '200', req.response_status
     assert_equal 'text/plain', req.response_headers['Content-Type']
-    assert_equal 'Hello, world!', req.response_body
+    assert_equal 'Hello, world!', req.adapter.body
   end
 
   def test_path_rewriting
@@ -29,7 +29,7 @@ class RackAppTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/foo/bar')
     app.route_and_call(req)
-    assert_equal 'path: /foo/bar', req.response_body
+    assert_equal 'path: /foo/bar', req.adapter.body
 
     ###
 
@@ -39,10 +39,10 @@ class RackAppTest < Minitest::Test
 
     req = mock_req(':method' => 'GET', ':path' => '/etc/rack')
     app.route_and_call(req)
-    assert_equal 'path: /', req.response_body
+    assert_equal 'path: /', req.adapter.body
 
     req = mock_req(':method' => 'GET', ':path' => '/etc/rack/foo/bar')
     app.route_and_call(req)
-    assert_equal 'path: /foo/bar', req.response_body
+    assert_equal 'path: /foo/bar', req.adapter.body
   end
 end

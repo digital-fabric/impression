@@ -46,7 +46,7 @@ module Minitest::Assertions
     msg = message(msg) { "Expected HTTP status 200 OK, but instead got #{status}" }
     assert_equal 200, status, msg
 
-    actual = req.response_body
+    actual = req.adapter.body
     assert_equal exp_body.gsub("\n", ''), actual&.gsub("\n", '')
 
     return unless exp_content_type
@@ -81,10 +81,6 @@ end
 class Qeweney::Request
   def response_headers
     adapter.headers
-  end
-
-  def response_body
-    adapter.body
   end
 
   def response_status

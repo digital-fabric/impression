@@ -145,12 +145,7 @@ module Impression
     def render_from_path_info(req, path_info)
       case (kind = path_info[:kind])
       when :not_found
-        mod_path_info = up_tree_resource_module_path_info(req, path_info)
-        if mod_path_info
-          render_module(req, mod_path_info)
-        else
-          req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
-        end
+        req.respond(nil, ':status' => Qeweney::Status::NOT_FOUND)
       when :module
         render_module(req, path_info)
       when :markdown
